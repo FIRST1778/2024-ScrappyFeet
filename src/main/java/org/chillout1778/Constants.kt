@@ -33,5 +33,12 @@ object Constants {
         const val CONVERSION_FACTOR = .12 //meters/pulley revolution
         const val LOWER_LIMIT = 0.0
         val UPPER_LIMIT = Units.inchesToMeters(31.0) //can technically be 31.25
+
+        const val POSITION_TOLERANCE = .01
+
+        enum class ElevatorState(var position: Double){
+            STORED(0.01),
+            AMP(Units.inchesToMeters(31.0))
+        }
     }
 }

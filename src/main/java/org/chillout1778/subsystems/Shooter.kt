@@ -3,6 +3,7 @@ package org.chillout1778.subsystems
 import com.ctre.phoenix6.hardware.TalonFX
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
+import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.Subsystem
 import org.chillout1778.Constants
 
@@ -12,7 +13,8 @@ object Shooter : Subsystem {
     private val bottomFlywheelMotor = CANSparkMax(Constants.Shooter.BOTTOM_FLY_WHEEL_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless).apply{
         follow(topFlywheelMotor)
     }
-
+    private val lineBreak = DigitalInput(0)
+    val noteStored get() = !lineBreak.get()
     fun suck(){
         rollerMotor.set(-0.3)
     }
@@ -22,7 +24,7 @@ object Shooter : Subsystem {
     fun stopRollers(){
         rollerMotor.set(0.0)
     }
-    fun shoot(){
+    fun revFlywheels(){
         topFlywheelMotor.set(0.8)
     }
     fun stopFlywheels(){

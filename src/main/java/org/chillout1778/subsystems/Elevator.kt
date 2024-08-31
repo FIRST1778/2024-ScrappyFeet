@@ -18,6 +18,7 @@ object Elevator : Subsystem {
             field = temp
         }
 
+    val atSetpoint get() = setpoint - Constants.Elevator.POSITION_TOLERANCE <= position && setpoint + Constants.Elevator.POSITION_TOLERANCE >= position
     var zeroed = false
 
     override fun periodic() {

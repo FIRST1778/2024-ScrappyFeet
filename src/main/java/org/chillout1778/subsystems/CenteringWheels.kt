@@ -16,7 +16,10 @@ object CenteringWheels : Subsystem {
     fun spit(){
         rightMotor.set(-0.8)
     }
-    fun stopCenteringWheels(){
+    fun passiveSpit(){
+        rightMotor.set(-.1)
+    }
+    fun stop(){
         rightMotor.set(0.0)
     }
 }
