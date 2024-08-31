@@ -3,8 +3,6 @@ package org.chillout1778.subsystems
 import com.ctre.phoenix6.hardware.Pigeon2
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
-import edu.wpi.first.math.controller.RamseteController
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import edu.wpi.first.wpilibj2.command.Subsystem
 import org.chillout1778.Constants
@@ -20,10 +18,8 @@ object Drivetrain : Subsystem {
         leftSlave.follow(leftMaster)
     }
 
-    private val controller = RamseteController(2.0,0.7)
-    private val gyro = Pigeon2(Constants.Drivetrain.PIGEON)
-    private val kinematics = DifferentialDriveKinematics(Constants.Drivetrain.TRACK_WIDTH)
-    private val odometry = DifferentialDriveKinematics(Constants.Drivetrain.TRACK_WIDTH)
+    private val gyro = Pigeon2(Constants.Drivetrain.PIGEON_ID)
+    private val drivetrain = DifferentialDrive(leftMaster, rightMaster)
 
     init{
         val factor = Math.PI / 30.0 * Constants.Drivetrain.WHEEL_RADIUS * Constants.Drivetrain.REDUCTION
@@ -32,7 +28,7 @@ object Drivetrain : Subsystem {
     }
 
     fun drive(driveSpeed: Double, rotationSpeed: Double){
-
+        drivetrain.arcadeDrive(driveSpeed, rotationSpeed)
     }
 
     fun zeroYaw(rotation: Double = 0.0){
