@@ -3,6 +3,7 @@ package org.chillout1778
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.math.util.Units
+import kotlin.math.PI
 
 object Constants {
     object Drivetrain{
@@ -13,8 +14,11 @@ object Constants {
         const val PIGEON_ID = 30
 
         val TRACK_WIDTH = Units.inchesToMeters(22.9)
-        val WHEEL_RADIUS = Units.inchesToMeters(6.0)
-        const val REDUCTION = 7.31
+        val WHEEL_RADIUS = Units.inchesToMeters(3.0)
+        const val REDUCTION = 1.0 / 7.31
+
+        val MAX_SPEED = 5676.0 / 60.0 * REDUCTION * 2.0 * PI * WHEEL_RADIUS
+        val MAX_ANGULAR_SPEED: Double = MAX_SPEED / TRACK_WIDTH
     }
     object Shooter{
         const val ROLLER_MOTOR_ID = 5

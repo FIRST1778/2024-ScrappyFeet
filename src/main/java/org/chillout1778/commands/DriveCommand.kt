@@ -3,14 +3,19 @@ package org.chillout1778.commands
 import edu.wpi.first.wpilibj2.command.Command
 import org.chillout1778.Controls
 import org.chillout1778.subsystems.Drivetrain
+import kotlin.math.abs
+import kotlin.math.sign
 
 class DriveCommand : Command(){
     init{
         addRequirements(Drivetrain)
     }
 
+    private fun square(n: Double) = n*n* sign(n)
+    private fun deadband(n: Double) = if(abs(n) < 0.05) 0.0 else n
+
     override fun execute() {
-        Drivetrain.drive(Controls.driveController.hid.leftY,Controls.driveController.hid.rightX)
+        Drivetrain.drive(-square(deadband(Controls.driveController.hid.leftY)), square(deadband(Controls.driveController.hid.rightX)))
     }
 
     override fun end(interrupted: Boolean) {

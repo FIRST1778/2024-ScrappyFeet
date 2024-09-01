@@ -8,9 +8,11 @@ class ElevatorZeroCommand : Command(){
         addRequirements(Elevator)
     }
     override fun initialize() {
-        Elevator.zero()
-        Elevator.zeroed = true
-        Elevator.resetController()
+        if(!Elevator.zeroed){
+            Elevator.zero()
+            Elevator.zeroed = true
+            Elevator.resetController()
+        }
     }
     override fun isFinished(): Boolean = true
 }

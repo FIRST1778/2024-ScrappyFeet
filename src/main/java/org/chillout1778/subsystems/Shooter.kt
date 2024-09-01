@@ -1,5 +1,6 @@
 package org.chillout1778.subsystems
 
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs
 import com.ctre.phoenix6.hardware.TalonFX
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
@@ -15,6 +16,7 @@ object Shooter : Subsystem {
     }
     private val lineBreak = DigitalInput(0)
     val noteStored get() = !lineBreak.get()
+
     fun suck(){
         rollerMotor.set(-0.3)
     }

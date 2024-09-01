@@ -1,9 +1,12 @@
 package org.chillout1778
 
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.chillout1778.commands.ElevatorMoveCommand
+import org.chillout1778.commands.ElevatorZeroCommand
 import org.chillout1778.subsystems.Drivetrain
 
 /**
@@ -18,12 +21,14 @@ import org.chillout1778.subsystems.Drivetrain
  */
 object Robot : TimedRobot() {
     private var autonomousCommand: Command? = null
+    val redAlliance : Boolean get() = DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 
     override fun robotInit() {
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
-        RobotContainer
         Drivetrain
+        Drivetrain.zeroYaw()
+        Drivetrain.configureAutoBuilder()
     }
 
 
@@ -40,8 +45,7 @@ object Robot : TimedRobot() {
     }
 
     override fun autonomousInit() {
-        autonomousCommand = RobotContainer.getAutonomousCommand()
-        autonomousCommand?.schedule()
+        ElevatorZeroCommand().andThen(autonomousCommand).schedule()
     }
 
     override fun autonomousPeriodic() {
@@ -50,6 +54,7 @@ object Robot : TimedRobot() {
 
     override fun teleopInit() {
         autonomousCommand?.cancel()
+        ElevatorZeroCommand().andThen(ElevatorMoveCommand(Constants.Elevator.ElevatorState.STORED)).schedule()
     }
 
     /** This method is called periodically during operator control.  */

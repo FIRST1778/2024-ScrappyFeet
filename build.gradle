@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     id "java"
@@ -109,10 +111,13 @@ tasks.withType(JavaCompile) {
 }
 
 kotlin {
+    sourceSets {
+        main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
+        test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
+    }
     compilerOptions {
-        jvmTarget.set(kotlinJvmTarget)
-        // https://kotlinlang.org/docs/gradle-configure-project.html#gradle-java-toolchains-support
-        jvmToolchain(Integer.valueOf(javaVersion.toString()))
+        apiVersion = KotlinVersion.KOTLIN_1_9
+        jvmTarget = JvmTarget.JVM_17
     }
 }
 
