@@ -16,6 +16,7 @@ object Shooter : Subsystem {
     }
     private val lineBreak = DigitalInput(0)
     val noteStored get() = !lineBreak.get()
+    val atFlywheelSpeed get() = topFlywheelMotor.encoder.velocity > 4000.0
 
     fun suck(){
         rollerMotor.set(-0.3)

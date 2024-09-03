@@ -1,5 +1,7 @@
 package org.chillout1778
 
+import com.pathplanner.lib.auto.NamedCommands
+import edu.wpi.first.math.Pair
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
@@ -7,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.chillout1778.commands.ElevatorMoveCommand
 import org.chillout1778.commands.ElevatorZeroCommand
+import org.chillout1778.commands.IntakeCommand
+import org.chillout1778.commands.ShooterShootCommand
 import org.chillout1778.subsystems.Drivetrain
 
 /**
@@ -62,20 +66,14 @@ object Robot : TimedRobot() {
 
     }
 
-    override fun testInit() {
-        // Cancels all running commands at the start of test mode.
-        CommandScheduler.getInstance().cancelAll()
+    fun configureNamedCommands(){
+        NamedCommands.registerCommands(
+            listOf(
+                Pair("Shoot", ShooterShootCommand()),
+                Pair("Intake", IntakeCommand())
+            )
+        )
     }
 
-    override fun testPeriodic() {
 
-    }
-
-    override fun simulationInit() {
-
-    }
-
-    override fun simulationPeriodic() {
-
-    }
 }

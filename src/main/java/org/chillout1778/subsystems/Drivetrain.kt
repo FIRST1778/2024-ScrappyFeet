@@ -2,6 +2,7 @@ package org.chillout1778.subsystems
 
 import com.ctre.phoenix6.hardware.Pigeon2
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.util.ReplanningConfig
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax

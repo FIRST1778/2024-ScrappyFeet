@@ -8,7 +8,7 @@ import org.chillout1778.commands.ShooterAmpCommand
 
 object Controls {
     val driveController = CommandXboxController(0)
-    val driverApproval get() = driveController.hid.aButton
+    val driverApproval get() = driveController.hid.aButton || Robot.isAutonomous
 
     init{
         driveController.rightTrigger()                   //Intake
