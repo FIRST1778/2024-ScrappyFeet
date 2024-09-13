@@ -12,6 +12,7 @@ import org.chillout1778.commands.ElevatorZeroCommand
 import org.chillout1778.commands.IntakeCommand
 import org.chillout1778.commands.ShooterShootCommand
 import org.chillout1778.subsystems.Drivetrain
+import org.chillout1778.subsystems.Elevator
 
 /**
  * The VM is configured to automatically run this object (which basically functions as a singleton class),
@@ -31,8 +32,10 @@ object Robot : TimedRobot() {
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
         Drivetrain
-        Drivetrain.zeroYaw()
-        Drivetrain.configureAutoBuilder()
+        Controls
+        CommandScheduler.getInstance().registerSubsystem(Elevator)
+//        Drivetrain.zeroYaw()
+//        Drivetrain.configureAutoBuilder()
     }
 
 

@@ -32,7 +32,7 @@ object Constants {
     object Elevator{
         const val MASTER_MOTOR_ID = 10
         const val SLAVE_MOTOR_ID = 11
-        val CONTROLLER = ProfiledPIDController(0.0001, 0.0, 0.0, TrapezoidProfile.Constraints(0.0001, 0.0001))
+        val CONTROLLER = ProfiledPIDController(100.0, 0.0, 0.0, TrapezoidProfile.Constraints(40.0, 60.0))
         const val REDUCTION = 1/12.444
         const val CONVERSION_FACTOR = .12 //meters/pulley revolution
         const val LOWER_LIMIT = 0.0
@@ -42,6 +42,8 @@ object Constants {
 
         enum class ElevatorState(var position: Double){
             STORED(0.01),
+            CLIMB_UP(Units.inchesToMeters(31.0)),
+            CLIMB_DOWN(Units.inchesToMeters(20.0)),
             AMP(Units.inchesToMeters(31.0))
         }
     }

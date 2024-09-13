@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.Pigeon2
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.util.ReplanningConfig
+import com.revrobotics.CANSparkBase.IdleMode
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.math.geometry.Pose2d
@@ -20,10 +21,18 @@ import java.util.function.Supplier
 import kotlin.math.PI
 
 object Drivetrain : Subsystem {
-    val rightMaster = CANSparkMax(Constants.Drivetrain.RIGHT_NEO_MASTER_ID,CANSparkLowLevel.MotorType.kBrushless)
-    val rightSlave = CANSparkMax(Constants.Drivetrain.RIGHT_NEO_SLAVE_ID,CANSparkLowLevel.MotorType.kBrushless)
-    val leftMaster = CANSparkMax(Constants.Drivetrain.LEFT_NEO_MASTER_ID,CANSparkLowLevel.MotorType.kBrushless)
-    val leftSlave = CANSparkMax(Constants.Drivetrain.LEFT_NEO_SLAVE_ID,CANSparkLowLevel.MotorType.kBrushless)
+    val rightMaster = CANSparkMax(Constants.Drivetrain.RIGHT_NEO_MASTER_ID,CANSparkLowLevel.MotorType.kBrushless).apply {
+        idleMode = IdleMode.kBrake
+    }
+    val rightSlave = CANSparkMax(Constants.Drivetrain.RIGHT_NEO_SLAVE_ID,CANSparkLowLevel.MotorType.kBrushless).apply {
+        idleMode = IdleMode.kBrake
+    }
+    val leftMaster = CANSparkMax(Constants.Drivetrain.LEFT_NEO_MASTER_ID,CANSparkLowLevel.MotorType.kBrushless).apply {
+        idleMode = IdleMode.kBrake
+    }
+    val leftSlave = CANSparkMax(Constants.Drivetrain.LEFT_NEO_SLAVE_ID,CANSparkLowLevel.MotorType.kBrushless).apply {
+        idleMode = IdleMode.kBrake
+    }
 
     init{
         rightMaster.inverted = false

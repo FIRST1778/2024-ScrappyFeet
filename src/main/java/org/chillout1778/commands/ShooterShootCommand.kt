@@ -16,7 +16,7 @@ class ShooterShootCommand : Command(){
     override fun execute() {
         if(Controls.driverApproval && Shooter.atFlywheelSpeed) Shooter.suck()
     }
-    override fun isFinished() = !Shooter.noteStored
+    override fun isFinished() = false // !Shooter.noteStored
 
     override fun end(interrupted: Boolean) {
         Shooter.stopFlywheels()
