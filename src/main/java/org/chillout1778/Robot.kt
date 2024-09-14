@@ -13,7 +13,6 @@ import org.chillout1778.commands.IntakeCommand
 import org.chillout1778.commands.ShooterShootCommand
 import org.chillout1778.subsystems.Drivetrain
 import org.chillout1778.subsystems.Elevator
-
 /**
  * The VM is configured to automatically run this object (which basically functions as a singleton class),
  * and to call the functions corresponding to each mode, as described in the TimedRobot documentation.

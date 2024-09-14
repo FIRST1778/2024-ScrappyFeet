@@ -1,5 +1,6 @@
 package org.chillout1778.subsystems
 
+import com.kauailabs.navx.frc.AHRS
 import com.ctre.phoenix6.hardware.Pigeon2
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
@@ -41,7 +42,7 @@ object Drivetrain : Subsystem {
         leftSlave.follow(leftMaster)
     }
 
-    private val gyro = Pigeon2(Constants.Drivetrain.PIGEON_ID)
+    private val gyro = AHRS()
     private val drivetrain = DifferentialDrive(leftMaster, rightMaster)
     private val odometry = DifferentialDriveOdometry(
         gyro.rotation2d,
@@ -61,7 +62,8 @@ object Drivetrain : Subsystem {
     }
 
     fun zeroYaw(rotation: Double = 0.0){
-        gyro.setYaw(Math.toDegrees(rotation))
+        //gyro.setYaw(Math.toDegrees(rotation))
+        gyro.zeroYaw()
     }
 
     init {
