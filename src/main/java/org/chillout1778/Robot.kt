@@ -33,8 +33,9 @@ object Robot : TimedRobot() {
         Drivetrain
         Controls
         CommandScheduler.getInstance().registerSubsystem(Elevator)
-//        Drivetrain.zeroYaw()
-//        Drivetrain.configureAutoBuilder()
+        Drivetrain.zeroYaw()
+        Drivetrain.configureAutoBuilder()
+        configureNamedCommands()
     }
 
 

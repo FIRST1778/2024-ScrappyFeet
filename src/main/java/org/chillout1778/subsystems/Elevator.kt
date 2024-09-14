@@ -51,6 +51,6 @@ object Elevator : Subsystem , Sendable{
     }
 
     init{
-        Shuffleboard.getTab("Elevator").add("Shooter", this)
+        Shuffleboard.getTab("Elevator").add("Elevator", this)
     }
 }
