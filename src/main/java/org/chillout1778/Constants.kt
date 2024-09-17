@@ -43,7 +43,7 @@ object Constants {
         enum class ElevatorState(var position: Double){
             STORED(0.01),
             CLIMB_UP(Units.inchesToMeters(31.0)),
-            CLIMB_DOWN(Units.inchesToMeters(20.0)),
+            CLIMB_DOWN(Units.inchesToMeters(15.0)),
             AMP(Units.inchesToMeters(31.0))
         }
     }

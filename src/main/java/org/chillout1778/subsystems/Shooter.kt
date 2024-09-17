@@ -20,16 +20,18 @@ object Shooter : Subsystem, Sendable {
     }
     private val lineBreak = DigitalInput(0)
     val noteStored get() = !lineBreak.get()
-    val atFlywheelSpeed get() = topFlywheelMotor.velocity.value > 4000.0
+    val atFlywheelSpeed get() = topFlywheelMotor.velocity.value > 90.0
 
     fun suck(){
         rollerMotor.set(-0.3)
+        topFlywheelMotor.setVoltage(-2.0)
     }
     fun spit(){
         rollerMotor.set(0.5)
     }
     fun slowSpit(){
         rollerMotor.set(0.1)
+        topFlywheelMotor.setVoltage(-2.0)
     }
     fun stopRollers(){
         rollerMotor.set(0.0)
@@ -44,6 +46,7 @@ object Shooter : Subsystem, Sendable {
     override fun initSendable(builder: SendableBuilder?) {
         builder!!
         builder.addBooleanProperty("Note Stored", { noteStored }, {})
+        builder.addDoubleProperty("RPM", {topFlywheelMotor.velocity.value},{})
     }
 
     init {

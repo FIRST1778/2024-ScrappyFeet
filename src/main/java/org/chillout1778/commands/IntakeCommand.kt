@@ -15,7 +15,7 @@ class IntakeCommand: Command(){
         Shooter.suck()
         CenteringWheels.suck()
     }
-    override fun isFinished() = false//Shooter.noteStored
+    override fun isFinished() = Robot.isAutonomous//Shooter.noteStored
 
     override fun end(interrupted: Boolean) {
         Shooter.stopRollers()

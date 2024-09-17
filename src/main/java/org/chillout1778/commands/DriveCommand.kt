@@ -11,11 +11,11 @@ class DriveCommand : Command(){
         addRequirements(Drivetrain)
     }
 
-    private fun square(n: Double) = n*n* sign(n)
+    private fun square(n: Double) = n//*n* sign(n)
     private fun deadband(n: Double) = if(abs(n) < 0.05) 0.0 else n
 
     override fun execute() {
-        Drivetrain.drive(-square(deadband(Controls.operatorController.hid.leftY)), square(deadband(Controls.operatorController.hid.rightX)) * .8)
+        Drivetrain.drive(square(deadband(Controls.driverController.getRawAxis(2))), square(deadband(Controls.driverController.getRawAxis(0))))
     }
 
     override fun end(interrupted: Boolean) {

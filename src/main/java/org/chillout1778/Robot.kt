@@ -1,9 +1,12 @@
 package org.chillout1778
 
+import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.Pair
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.TimedRobot
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
@@ -24,6 +27,7 @@ import org.chillout1778.subsystems.Elevator
  * object or package, it will get changed everywhere.)
  */
 object Robot : TimedRobot() {
+    private lateinit var autoChooser: SendableChooser<Command>
     private var autonomousCommand: Command? = null
     val redAlliance : Boolean get() = DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 
@@ -36,8 +40,9 @@ object Robot : TimedRobot() {
         Drivetrain.zeroYaw()
         Drivetrain.configureAutoBuilder()
         configureNamedCommands()
+        autoChooser = AutoBuilder.buildAutoChooser()
+        Shuffleboard.getTab("Autos").add("Auto", autoChooser)
     }
-
 
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
@@ -52,6 +57,7 @@ object Robot : TimedRobot() {
     }
 
     override fun autonomousInit() {
+        autonomousCommand = autoChooser.selected
         ElevatorZeroCommand().andThen(autonomousCommand).schedule()
     }
 
