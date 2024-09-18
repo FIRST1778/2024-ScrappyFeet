@@ -21,7 +21,6 @@ class IntakeCommand: Command(){
     override fun end(interrupted: Boolean) {
         Shooter.stopRollers()
         passiveSpit()
-        if(!interrupted)
-            LimelightFlashCommand().schedule()
+        if(!interrupted) LimelightFlashCommand().schedule()
     }
 }

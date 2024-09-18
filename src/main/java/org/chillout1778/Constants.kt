@@ -17,8 +17,8 @@ object Constants {
         val WHEEL_RADIUS = Units.inchesToMeters(3.0)
         const val REDUCTION = 1.0 / 7.31
 
-        val MAX_SPEED = 5676.0 / 60.0 * REDUCTION * 2.0 * PI * WHEEL_RADIUS
-        val MAX_ANGULAR_SPEED: Double = MAX_SPEED / (TRACK_WIDTH / 2)
+        val MAX_SPEED = 5676.0 / 60.0 * REDUCTION * 2.0 * PI * WHEEL_RADIUS // m/s
+        val MAX_ANGULAR_SPEED: Double = MAX_SPEED / (TRACK_WIDTH / 2) // rad/s
     }
     object Shooter{
         const val ROLLER_MOTOR_ID = 5
