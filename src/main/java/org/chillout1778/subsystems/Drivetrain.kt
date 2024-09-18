@@ -46,8 +46,8 @@ object Drivetrain : Subsystem, Sendable{
     }
 
     init{
-        rightMaster.inverted = false
-        leftMaster.inverted = true
+        rightMaster.inverted = true
+        leftMaster.inverted = false
         rightSlave.follow(rightMaster)
         leftSlave.follow(leftMaster)
     }
@@ -121,6 +121,12 @@ object Drivetrain : Subsystem, Sendable{
     override fun initSendable(builder: SendableBuilder?) {
         builder!!
         builder.addDoubleProperty("Gyro", {gyro.rotation2d.degrees}, {})
+        builder.addDoubleProperty("Left Speed", { leftMaster.toDrivetrainSpeed().`in`(MetersPerSecond)}, {})
+        builder.addDoubleProperty("Right Speed", { rightMaster.toDrivetrainSpeed().`in`(MetersPerSecond)}, {})
+        builder.addDoubleProperty("Left Distance", { leftMaster.toDrivetrainDistance().`in`(Meters)}, {})
+        builder.addDoubleProperty("Right Distance", { rightMaster.toDrivetrainDistance().`in`(Meters)}, {})
+
+
     }
 
     init{

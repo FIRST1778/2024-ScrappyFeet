@@ -7,10 +7,10 @@ import kotlin.math.PI
 
 object Constants {
     object Drivetrain{
-        const val RIGHT_NEO_MASTER_ID = 1
-        const val RIGHT_NEO_SLAVE_ID = 2
-        const val LEFT_NEO_MASTER_ID = 3
-        const val LEFT_NEO_SLAVE_ID = 4
+        const val RIGHT_NEO_MASTER_ID = 3
+        const val RIGHT_NEO_SLAVE_ID = 4
+        const val LEFT_NEO_MASTER_ID = 1
+        const val LEFT_NEO_SLAVE_ID = 2
         const val PIGEON_ID = 30
 
         val TRACK_WIDTH = Units.inchesToMeters(22.9)
@@ -18,7 +18,7 @@ object Constants {
         const val REDUCTION = 1.0 / 7.31
 
         val MAX_SPEED = 5676.0 / 60.0 * REDUCTION * 2.0 * PI * WHEEL_RADIUS
-        val MAX_ANGULAR_SPEED: Double = MAX_SPEED / TRACK_WIDTH
+        val MAX_ANGULAR_SPEED: Double = MAX_SPEED / (TRACK_WIDTH / 2)
     }
     object Shooter{
         const val ROLLER_MOTOR_ID = 5

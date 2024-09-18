@@ -10,10 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
-import org.chillout1778.commands.ElevatorMoveCommand
-import org.chillout1778.commands.ElevatorZeroCommand
-import org.chillout1778.commands.IntakeCommand
-import org.chillout1778.commands.ShooterShootCommand
+import org.chillout1778.commands.*
 import org.chillout1778.subsystems.Drivetrain
 import org.chillout1778.subsystems.Elevator
 /**
@@ -68,6 +65,7 @@ object Robot : TimedRobot() {
     override fun teleopInit() {
         autonomousCommand?.cancel()
         ElevatorZeroCommand().andThen(ElevatorMoveCommand(Constants.Elevator.ElevatorState.STORED)).schedule()
+        LimelightFlashCommand().schedule()
     }
 
     /** This method is called periodically during operator control.  */
