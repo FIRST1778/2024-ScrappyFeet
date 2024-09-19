@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.chillout1778.commands.*
 import org.chillout1778.subsystems.Drivetrain
@@ -24,9 +25,17 @@ import org.chillout1778.subsystems.Elevator
  * object or package, it will get changed everywhere.)
  */
 object Robot : TimedRobot() {
-    private lateinit var autoChooser: SendableChooser<Command>
+    private var autoChooser: SendableChooser<Command> = SendableChooser()
     private var autonomousCommand: Command? = null
     val redAlliance : Boolean get() = DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+
+    enum class Autos(val command: Command) {
+        SHOOT_GET_SPIKE_SHOOT(
+            SequentialCommandGroup(
+                DriveForwardCommand(0.0, 0.0, 5.0)
+            )
+        )
+    }
 
     override fun robotInit() {
         // Access the RobotContainer object so that it is initialized. This will perform all our
@@ -34,11 +43,13 @@ object Robot : TimedRobot() {
         Drivetrain
         Controls
         CommandScheduler.getInstance().registerSubsystem(Elevator)
-        Drivetrain.zeroYaw()
-        Drivetrain.configureAutoBuilder()
-        configureNamedCommands()
-        autoChooser = AutoBuilder.buildAutoChooser()
+//        Drivetrain.zeroYaw()
+//        Drivetrain.configureAutoBuilder()
+//        configureNamedCommands()
+        autoChooser.setDefaultOption("Nothing", InstantCommand())
+        for(auto in Autos.entries) autoChooser.addOption(auto.name, auto.command)
         Shuffleboard.getTab("Autos").add("Auto", autoChooser)
+
     }
 
     override fun robotPeriodic() {
@@ -55,7 +66,7 @@ object Robot : TimedRobot() {
 
     override fun autonomousInit() {
         autonomousCommand = autoChooser.selected
-        ElevatorZeroCommand().andThen(autonomousCommand).schedule()
+        ElevatorZeroCommand().andThen(ElevatorMoveCommand(Constants.Elevator.ElevatorState.STORED)).andThen(autonomousCommand).schedule()
     }
 
     override fun autonomousPeriodic() {

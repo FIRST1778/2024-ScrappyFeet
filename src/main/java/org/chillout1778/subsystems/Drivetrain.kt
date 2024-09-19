@@ -76,13 +76,13 @@ object Drivetrain : Subsystem, Sendable{
 
     fun drive(driveSpeed: Double, rotationSpeed: Double){
         drivetrain.arcadeDrive(driveSpeed, rotationSpeed)
-        odometry.update(
-            gyro.rotation2d,
-            DifferentialDriveWheelPositions(
-                leftMaster.toDrivetrainDistance(),
-                rightMaster.toDrivetrainDistance()
-            )
-        )
+//        odometry.update(
+//            gyro.rotation2d,
+//            DifferentialDriveWheelPositions(
+//                leftMaster.toDrivetrainDistance(),
+//                rightMaster.toDrivetrainDistance()
+//            )
+//        )
     }
 
     fun zeroYaw(){
@@ -91,6 +91,7 @@ object Drivetrain : Subsystem, Sendable{
 
     init {
         defaultCommand = DriveCommand()
+
     }
 
     private fun resetPosition(pose: Pose2d){
@@ -101,6 +102,7 @@ object Drivetrain : Subsystem, Sendable{
             pose
         )
     }
+    var requestedTurn = 0.0
 
     fun configureAutoBuilder(){
         AutoBuilder.configureRamsete(
@@ -110,8 +112,11 @@ object Drivetrain : Subsystem, Sendable{
                 leftMaster.toDrivetrainSpeed(),
                 rightMaster.toDrivetrainSpeed())) },
             { speeds: ChassisSpeeds ->
-                drive(speeds.vxMetersPerSecond / Constants.Drivetrain.MAX_SPEED,
-                    speeds.omegaRadiansPerSecond / Constants.Drivetrain.MAX_ANGULAR_SPEED) },
+                ChassisSpeeds.discretize(speeds, 5.0)
+                drive(speeds.vxMetersPerSecond/ Constants.Drivetrain.MAX_SPEED,
+                    speeds.omegaRadiansPerSecond / 2)
+                requestedTurn = speeds.omegaRadiansPerSecond
+            },
              ReplanningConfig(),
             { Robot.redAlliance },
             this
@@ -125,7 +130,8 @@ object Drivetrain : Subsystem, Sendable{
         builder.addDoubleProperty("Right Speed", { rightMaster.toDrivetrainSpeed().`in`(MetersPerSecond)}, {})
         builder.addDoubleProperty("Left Distance", { leftMaster.toDrivetrainDistance().`in`(Meters)}, {})
         builder.addDoubleProperty("Right Distance", { rightMaster.toDrivetrainDistance().`in`(Meters)}, {})
-
+        builder.addDoubleProperty("Requested Turn", { requestedTurn}, {})
+//        builder.addStringProperty("Current Command", {this.currentCommand.name}, {})
 
     }
 

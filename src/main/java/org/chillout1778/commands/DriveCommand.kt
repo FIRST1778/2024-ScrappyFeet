@@ -15,7 +15,8 @@ class DriveCommand : Command(){
     private fun deadband(n: Double) = if(abs(n) < 0.05) 0.0 else n
 
     override fun execute() {
-        Drivetrain.drive(square(deadband(Controls.driverController.getRawAxis(2))), square(deadband(Controls.driverController.getRawAxis(0))))
+//        Drivetrain.drive(square(deadband(Controls.driverController.getRawAxis(2))), square(deadband(Controls.driverController.getRawAxis(0))))
+        Drivetrain.drive(square(deadband(-Controls.operatorController.leftY)), square(deadband(-Controls.operatorController.rightX)))
     }
 
     override fun end(interrupted: Boolean) {
