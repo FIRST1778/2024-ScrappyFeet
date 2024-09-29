@@ -23,33 +23,26 @@ import org.chillout1778.Robot
 import org.chillout1778.commands.DriveCommand
 import kotlin.math.PI
 
-object Drivetrain : Subsystem, Sendable{
+object Drivetrain : Subsystem, Sendable {
 
-    val kIdleMode : IdleMode = IdleMode.kBrake
+    val kIdleMode: IdleMode = IdleMode.kBrake
     val stallLimit: Int = 40
     val freeLimit: Int = 40
-    val rightMaster = CANSparkMax(Constants.Drivetrain.RIGHT_NEO_MASTER_ID,CANSparkLowLevel.MotorType.kBrushless).apply {
-        idleMode = kIdleMode
-        setSmartCurrentLimit(stallLimit, freeLimit)
-    }
-    val rightSlave = CANSparkMax(Constants.Drivetrain.RIGHT_NEO_SLAVE_ID,CANSparkLowLevel.MotorType.kBrushless).apply {
-        idleMode = kIdleMode
-        setSmartCurrentLimit(stallLimit, freeLimit)
-    }
-    val leftMaster = CANSparkMax(Constants.Drivetrain.LEFT_NEO_MASTER_ID,CANSparkLowLevel.MotorType.kBrushless).apply {
-        idleMode = kIdleMode
-        setSmartCurrentLimit(stallLimit, freeLimit)
-    }
-    val leftSlave = CANSparkMax(Constants.Drivetrain.LEFT_NEO_SLAVE_ID,CANSparkLowLevel.MotorType.kBrushless).apply {
-        idleMode = kIdleMode
-        setSmartCurrentLimit(stallLimit, freeLimit)
-    }
 
-    init{
-        rightMaster.inverted = true
-        leftMaster.inverted = false
+    private fun driveMotor(id: Int) = CANSparkMax(id, CANSparkLowLevel.MotorType.kBrushless).apply {
+        idleMode = kIdleMode
+        setSmartCurrentLimit(stallLimit, freeLimit)
+    }
+    val rightMaster = driveMotor(Constants.Drivetrain.RIGHT_NEO_MASTER_ID)
+    val rightSlave  = driveMotor(Constants.Drivetrain.RIGHT_NEO_SLAVE_ID)
+    val leftMaster  = driveMotor(Constants.Drivetrain.LEFT_NEO_MASTER_ID)
+    val leftSlave   = driveMotor(Constants.Drivetrain.LEFT_NEO_SLAVE_ID)
+
+    init {
         rightSlave.follow(rightMaster)
         leftSlave.follow(leftMaster)
+        rightMaster.inverted = true
+        leftMaster.inverted = false
     }
 
     private val gyro = AHRS()
@@ -125,8 +118,6 @@ object Drivetrain : Subsystem, Sendable{
         builder.addDoubleProperty("Right Speed", { rightMaster.toDrivetrainSpeed().`in`(MetersPerSecond)}, {})
         builder.addDoubleProperty("Left Distance", { leftMaster.toDrivetrainDistance().`in`(Meters)}, {})
         builder.addDoubleProperty("Right Distance", { rightMaster.toDrivetrainDistance().`in`(Meters)}, {})
-
-
     }
 
     init{
