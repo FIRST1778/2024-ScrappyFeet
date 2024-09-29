@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.chillout1778.commands.*
-import org.chillout1778.subsystems.Drivetrain
-import org.chillout1778.subsystems.Elevator
+import org.chillout1778.subsystems.*
 /**
  * The VM is configured to automatically run this object (which basically functions as a singleton class),
  * and to call the functions corresponding to each mode, as described in the TimedRobot documentation.
@@ -56,8 +55,19 @@ object Robot : TimedRobot() {
     override fun teleopInit() {
         autonomousCommand?.cancel()
         Elevator.ensureZeroed()
-        ElevatorMoveCommand(Elevator::down).schedule()
+        Elevator.down()
         LimelightFlashCommand().schedule()
+    }
+
+    override fun teleopPeriodic() {
+        Drivetrain.drive(
+            deadband(Controls.driverController.getRawAxis(2)),
+            deadband(Controls.driverController.getRawAxis(0))
+        )
+    }
+
+    override fun teleopExit() {
+        Drivetrain.drive(0.0, 0.0)
     }
 
     fun configureNamedCommands(){
