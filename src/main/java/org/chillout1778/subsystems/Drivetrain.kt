@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj2.command.Subsystem
 import kotlin.math.PI
+import org.chillout1778.commands.DriveCommand
 import org.chillout1778.neo
 import org.chillout1778.Robot
 
@@ -62,6 +63,11 @@ object Drivetrain : Subsystem, Sendable {
         neoDistance(leftMaster), neoDistance(rightMaster))
     private val kinematics = DifferentialDriveKinematics(TRACK_WIDTH)
 
+    init{
+        rightMaster.encoder.setVelocityConversionFactor(factor)
+        leftMaster.encoder.setVelocityConversionFactor(factor)
+    }
+
     fun drive(driveSpeed: Double, rotationSpeed: Double){
         drivetrain.arcadeDrive(driveSpeed, rotationSpeed)
         odometry.update(
@@ -75,6 +81,10 @@ object Drivetrain : Subsystem, Sendable {
 
     fun zeroYaw(){
         gyro.zeroYaw()
+    }
+
+    init {
+        defaultCommand = DriveCommand()
     }
 
     private fun resetPosition(pose: Pose2d){
