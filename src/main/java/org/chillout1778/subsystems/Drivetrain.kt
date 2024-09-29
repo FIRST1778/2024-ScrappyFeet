@@ -61,17 +61,11 @@ object Drivetrain : Subsystem, Sendable{
     )
     private val kinematics = DifferentialDriveKinematics(Constants.Drivetrain.TRACK_WIDTH)
 
-    val factor = Math.PI / 30.0 * Constants.Drivetrain.WHEEL_RADIUS * Constants.Drivetrain.REDUCTION
-
     private fun CANSparkMax.toDrivetrainDistance() : Measure<Distance>{
         return Meters.of(this.encoder.position * Constants.Drivetrain.REDUCTION * 2.0 * PI * Constants.Drivetrain.WHEEL_RADIUS)
     }
     private fun CANSparkMax.toDrivetrainSpeed(): Measure<Velocity<Distance>>{
         return MetersPerSecond.of(this.encoder.velocity / 60.0 * Constants.Drivetrain.REDUCTION * 2.0 * PI * Constants.Drivetrain.WHEEL_RADIUS)
-    }
-    init{
-        rightMaster.getEncoder().setVelocityConversionFactor(factor)
-        leftMaster.getEncoder().setVelocityConversionFactor(factor)
     }
 
     fun drive(driveSpeed: Double, rotationSpeed: Double){
