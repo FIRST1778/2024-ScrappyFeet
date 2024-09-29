@@ -63,11 +63,6 @@ object Drivetrain : Subsystem, Sendable {
         neoDistance(leftMaster), neoDistance(rightMaster))
     private val kinematics = DifferentialDriveKinematics(TRACK_WIDTH)
 
-    init{
-        rightMaster.encoder.setVelocityConversionFactor(factor)
-        leftMaster.encoder.setVelocityConversionFactor(factor)
-    }
-
     fun drive(driveSpeed: Double, rotationSpeed: Double){
         drivetrain.arcadeDrive(driveSpeed, rotationSpeed)
         odometry.update(
