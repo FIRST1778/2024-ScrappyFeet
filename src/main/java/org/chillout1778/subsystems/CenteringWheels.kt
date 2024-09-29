@@ -3,12 +3,15 @@ package org.chillout1778.subsystems
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj2.command.Subsystem
-import org.chillout1778.Constants
+import org.chillout1778.neo
 
-object CenteringWheels : Subsystem {
-    private val rightMotor = CANSparkMax(Constants.CenteringWheels.RIGHT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
-    private val leftMotor = CANSparkMax(Constants.CenteringWheels.LEFT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless).apply {
-        follow(rightMotor,true)
+object CenteringWheels: Subsystem {
+    const val RIGHT_ID = 8
+    const val LEFT_ID = 9
+
+    private val rightMotor = neo(RIGHT_ID)
+    private val leftMotor = neo(LEFT_ID).apply {
+        follow(rightMotor, true)
     }
     fun suck(){
         rightMotor.set(0.5)

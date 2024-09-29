@@ -10,13 +10,16 @@ import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj2.command.Subsystem
-import org.chillout1778.Constants
 
 object Shooter : Subsystem, Sendable {
-    private val rollerMotor = TalonFX(Constants.Shooter.ROLLER_MOTOR_ID)
-    private val topFlywheelMotor = TalonFX(Constants.Shooter.TOP_FLY_WHEEL_MOTOR_ID)
-    private val bottomFlywheelMotor = TalonFX(Constants.Shooter.BOTTOM_FLY_WHEEL_MOTOR_ID).apply{
-        setControl(Follower(Constants.Shooter.TOP_FLY_WHEEL_MOTOR_ID, false))
+    const val ROLLER_MOTOR_ID = 5
+    const val TOP_FLY_WHEEL_MOTOR_ID = 6
+    const val BOTTOM_FLY_WHEEL_MOTOR_ID = 7
+
+    private val rollerMotor = TalonFX(ROLLER_MOTOR_ID)
+    private val topFlywheelMotor = TalonFX(TOP_FLY_WHEEL_MOTOR_ID)
+    private val bottomFlywheelMotor = TalonFX(BOTTOM_FLY_WHEEL_MOTOR_ID).apply{
+        setControl(Follower(TOP_FLY_WHEEL_MOTOR_ID, false))
     }
     private val lineBreak = DigitalInput(0)
     val noteStored get() = !lineBreak.get()

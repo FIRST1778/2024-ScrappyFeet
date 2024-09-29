@@ -29,11 +29,13 @@ object Robot : TimedRobot() {
     val redAlliance : Boolean get() = DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 
     override fun robotInit() {
-        // Access the RobotContainer object so that it is initialized. This will perform all our
-        // button bindings, and put our autonomous chooser on the dashboard.
+        CenteringWheels
         Drivetrain
+        Elevator
+        Shooter
+
         Controls
-        CommandScheduler.getInstance().registerSubsystem(Elevator)
+
         Drivetrain.zeroYaw()
         Drivetrain.configureAutoBuilder()
         configureNamedCommands()
@@ -45,32 +47,17 @@ object Robot : TimedRobot() {
         CommandScheduler.getInstance().run()
     }
 
-    override fun disabledInit() {
-
-    }
-
-    override fun disabledPeriodic() {
-
-    }
-
     override fun autonomousInit() {
+        Elevator.ensureZeroed()
         autonomousCommand = autoChooser.selected
-        ElevatorZeroCommand().andThen(autonomousCommand).schedule()
-    }
-
-    override fun autonomousPeriodic() {
-
+        autonomousCommand?.schedule()
     }
 
     override fun teleopInit() {
         autonomousCommand?.cancel()
-        ElevatorZeroCommand().andThen(ElevatorMoveCommand(Constants.Elevator.ElevatorState.STORED)).schedule()
+        Elevator.ensureZeroed()
+        ElevatorMoveCommand(Elevator::down).schedule()
         LimelightFlashCommand().schedule()
-    }
-
-    /** This method is called periodically during operator control.  */
-    override fun teleopPeriodic() {
-
     }
 
     fun configureNamedCommands(){
@@ -81,6 +68,4 @@ object Robot : TimedRobot() {
             )
         )
     }
-
-
 }

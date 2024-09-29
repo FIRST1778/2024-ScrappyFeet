@@ -8,35 +8,46 @@ import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.*
-import edu.wpi.first.units.Distance
-import edu.wpi.first.units.Measure
-import edu.wpi.first.units.Units.Meters
-import edu.wpi.first.units.Units.MetersPerSecond
-import edu.wpi.first.units.Velocity
+import edu.wpi.first.math.util.Units
 import edu.wpi.first.util.sendable.Sendable
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj2.command.Subsystem
-import org.chillout1778.Constants
-import org.chillout1778.Robot
-import org.chillout1778.commands.DriveCommand
 import kotlin.math.PI
+import org.chillout1778.commands.DriveCommand
+import org.chillout1778.neo
+import org.chillout1778.Robot
 
 object Drivetrain : Subsystem, Sendable {
+    val RIGHT_NEO_MASTER_ID = 3
+    val RIGHT_NEO_SLAVE_ID = 4
+    val LEFT_NEO_MASTER_ID = 1
+    val LEFT_NEO_SLAVE_ID = 2
+    val PIGEON_ID = 30
 
-    val kIdleMode: IdleMode = IdleMode.kBrake
-    val stallLimit: Int = 40
-    val freeLimit: Int = 40
+    val TRACK_WIDTH: Double = Units.inchesToMeters(22.9)
+    val WHEEL_RADIUS: Double = Units.inchesToMeters(3.0)
+    val REDUCTION = 1.0 / 7.31
 
-    private fun driveMotor(id: Int) = CANSparkMax(id, CANSparkLowLevel.MotorType.kBrushless).apply {
-        idleMode = kIdleMode
-        setSmartCurrentLimit(stallLimit, freeLimit)
+    val MAX_SPEED = 5676.0 / 60.0 * REDUCTION * 2.0 * PI * WHEEL_RADIUS // m/s
+    val MAX_ANGULAR_SPEED: Double = MAX_SPEED / (TRACK_WIDTH / 2) // rad/s
+
+    private fun driveMotor(id: Int) = neo(id).apply {
+        idleMode = IdleMode.kBrake
+        setSmartCurrentLimit(40, 40) // stall, free
     }
-    val rightMaster = driveMotor(Constants.Drivetrain.RIGHT_NEO_MASTER_ID)
-    val rightSlave  = driveMotor(Constants.Drivetrain.RIGHT_NEO_SLAVE_ID)
-    val leftMaster  = driveMotor(Constants.Drivetrain.LEFT_NEO_MASTER_ID)
-    val leftSlave   = driveMotor(Constants.Drivetrain.LEFT_NEO_SLAVE_ID)
+    val rightMaster = driveMotor(RIGHT_NEO_MASTER_ID)
+    val rightSlave  = driveMotor(RIGHT_NEO_SLAVE_ID)
+    val leftMaster  = driveMotor(LEFT_NEO_MASTER_ID)
+    val leftSlave   = driveMotor(LEFT_NEO_SLAVE_ID)
+
+    val factor = Math.PI / 30.0 * WHEEL_RADIUS * REDUCTION
+
+    private fun neoDistance(n: CANSparkMax): Double =
+        n.encoder.position * REDUCTION * 2.0 * PI * WHEEL_RADIUS
+    private fun neoSpeed(n: CANSparkMax): Double =
+        n.encoder.velocity / 60.0 * REDUCTION * 2.0 * PI * WHEEL_RADIUS
 
     init {
         rightSlave.follow(rightMaster)
@@ -49,22 +60,12 @@ object Drivetrain : Subsystem, Sendable {
     private val drivetrain = DifferentialDrive(leftMaster, rightMaster)
     private val odometry = DifferentialDriveOdometry(
         gyro.rotation2d,
-        leftMaster.toDrivetrainDistance(),
-        rightMaster.toDrivetrainDistance()
-    )
-    private val kinematics = DifferentialDriveKinematics(Constants.Drivetrain.TRACK_WIDTH)
+        neoDistance(leftMaster), neoDistance(rightMaster))
+    private val kinematics = DifferentialDriveKinematics(TRACK_WIDTH)
 
-    val factor = Math.PI / 30.0 * Constants.Drivetrain.WHEEL_RADIUS * Constants.Drivetrain.REDUCTION
-
-    private fun CANSparkMax.toDrivetrainDistance() : Measure<Distance>{
-        return Meters.of(this.encoder.position * Constants.Drivetrain.REDUCTION * 2.0 * PI * Constants.Drivetrain.WHEEL_RADIUS)
-    }
-    private fun CANSparkMax.toDrivetrainSpeed(): Measure<Velocity<Distance>>{
-        return MetersPerSecond.of(this.encoder.velocity / 60.0 * Constants.Drivetrain.REDUCTION * 2.0 * PI * Constants.Drivetrain.WHEEL_RADIUS)
-    }
     init{
-        rightMaster.getEncoder().setVelocityConversionFactor(factor)
-        leftMaster.getEncoder().setVelocityConversionFactor(factor)
+        rightMaster.encoder.setVelocityConversionFactor(factor)
+        leftMaster.encoder.setVelocityConversionFactor(factor)
     }
 
     fun drive(driveSpeed: Double, rotationSpeed: Double){
@@ -72,8 +73,8 @@ object Drivetrain : Subsystem, Sendable {
         odometry.update(
             gyro.rotation2d,
             DifferentialDriveWheelPositions(
-                leftMaster.toDrivetrainDistance(),
-                rightMaster.toDrivetrainDistance()
+                neoDistance(leftMaster),
+                neoDistance(rightMaster)
             )
         )
     }
@@ -89,8 +90,8 @@ object Drivetrain : Subsystem, Sendable {
     private fun resetPosition(pose: Pose2d){
         odometry.resetPosition(
             gyro.rotation2d,
-            leftMaster.toDrivetrainDistance(),
-            rightMaster.toDrivetrainDistance(),
+            neoDistance(leftMaster),
+            neoDistance(rightMaster),
             pose
         )
     }
@@ -100,11 +101,11 @@ object Drivetrain : Subsystem, Sendable {
             { odometry.poseMeters },
             { pose : Pose2d -> resetPosition(pose) },
             { kinematics.toChassisSpeeds(DifferentialDriveWheelSpeeds(
-                leftMaster.toDrivetrainSpeed(),
-                rightMaster.toDrivetrainSpeed())) },
+                neoSpeed(leftMaster),
+                neoSpeed(rightMaster))) },
             { speeds: ChassisSpeeds ->
-                drive(speeds.vxMetersPerSecond / Constants.Drivetrain.MAX_SPEED,
-                    speeds.omegaRadiansPerSecond / Constants.Drivetrain.MAX_ANGULAR_SPEED) },
+                drive(speeds.vxMetersPerSecond / MAX_SPEED,
+                    speeds.omegaRadiansPerSecond / MAX_ANGULAR_SPEED) },
              ReplanningConfig(),
             { Robot.redAlliance },
             this
@@ -114,10 +115,10 @@ object Drivetrain : Subsystem, Sendable {
     override fun initSendable(builder: SendableBuilder?) {
         builder!!
         builder.addDoubleProperty("Gyro", {gyro.rotation2d.degrees}, {})
-        builder.addDoubleProperty("Left Speed", { leftMaster.toDrivetrainSpeed().`in`(MetersPerSecond)}, {})
-        builder.addDoubleProperty("Right Speed", { rightMaster.toDrivetrainSpeed().`in`(MetersPerSecond)}, {})
-        builder.addDoubleProperty("Left Distance", { leftMaster.toDrivetrainDistance().`in`(Meters)}, {})
-        builder.addDoubleProperty("Right Distance", { rightMaster.toDrivetrainDistance().`in`(Meters)}, {})
+        builder.addDoubleProperty("Left Speed", { neoSpeed(leftMaster)}, {})
+        builder.addDoubleProperty("Right Speed", { neoSpeed(rightMaster)}, {})
+        builder.addDoubleProperty("Left Distance", { neoDistance(leftMaster)}, {})
+        builder.addDoubleProperty("Right Distance", { neoDistance(rightMaster)}, {})
     }
 
     init{

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import org.chillout1778.commands.*
+import org.chillout1778.subsystems.Elevator
 
 object Controls {
     val operatorController = CommandXboxController(1)
@@ -13,26 +14,22 @@ object Controls {
     init{
         operatorController.rightTrigger()                   //Intake
             .whileTrue(
-                ElevatorMoveCommand(Constants.Elevator.ElevatorState.STORED)
+                ElevatorMoveCommand(Elevator::down)
                     .andThen(IntakeCommand())
             )
         operatorController.leftTrigger()                    //Shoot
             .whileTrue(
-                ElevatorMoveCommand(Constants.Elevator.ElevatorState.STORED)
+                ElevatorMoveCommand(Elevator::down)
                     .andThen(ShooterShootCommand())
             )
         operatorController.leftBumper()                     //Amp
             .whileTrue(
-                ElevatorMoveCommand(Constants.Elevator.ElevatorState.AMP)
+                ElevatorMoveCommand(Elevator::up)
                     .andThen(ShooterAmpCommand())
             )
             .onFalse(
-                ElevatorMoveCommand(Constants.Elevator.ElevatorState.STORED)
+                ElevatorMoveCommand(Elevator::down)
             )
         operatorController.b().whileTrue(ShooterSpitCommand())
-        operatorController.pov(0)
-            .onTrue(ElevatorMoveCommand(Constants.Elevator.ElevatorState.CLIMB_UP))
-        operatorController.pov(180)
-            .onTrue(ElevatorMoveCommand(Constants.Elevator.ElevatorState.CLIMB_DOWN))
     }
 }

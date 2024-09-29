@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import org.chillout1778.Controls
 import org.chillout1778.subsystems.Shooter
 
-class ShooterAmpCommand : Command(){
+class ShooterAmpCommand: Command() {
     init {
         addRequirements(Shooter)
     }
