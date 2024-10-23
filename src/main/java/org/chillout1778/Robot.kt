@@ -7,7 +7,10 @@ import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import org.chillout1778.commands.Autos
+import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import org.chillout1778.commands.FlywheelFastCommand
+import org.chillout1778.subsystems.Flywheels
 
 /**
  * The VM is configured to automatically run this object (which basically functions as a singleton class),
@@ -22,16 +25,14 @@ import org.chillout1778.commands.Autos
 object Robot : TimedRobot()
 {
 
-    private var autonomousCommand: Command? = null
-
-
     override fun robotInit()
     {
         // Report the use of the Kotlin Language for "FRC Usage Report" statistics
         HAL.report(tResourceType.kResourceType_Language, tInstances.kLanguage_Kotlin, 0, WPILibVersion.Version)
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
-        RobotContainer
+        val controller = CommandXboxController(3)
+        controller.leftTrigger().whileTrue(FlywheelFastCommand())
     }
 
 
@@ -50,10 +51,94 @@ object Robot : TimedRobot()
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
     override fun autonomousInit()
     {
-        autonomousCommand = RobotContainer.getAutonomousCommand()
-        autonomousCommand?.schedule()
     }
 
     override fun autonomousPeriodic()
@@ -63,7 +148,7 @@ object Robot : TimedRobot()
 
     override fun teleopInit()
     {
-        autonomousCommand?.cancel()
+        (FlywheelFastCommand().andThen(Commands.runOnce({println("Flywheel is fast now!")}))).schedule()
     }
 
     /** This method is called periodically during operator control.  */

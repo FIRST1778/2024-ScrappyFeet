@@ -6,7 +6,7 @@ plugins {
     id "idea"
 }
 
-def javaVersion = JavaVersion.VERSION_17
+def javaVersion = JavaVersion.VERSION_20
 def kotlinJvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.@Companion.fromTarget(javaVersion.toString())
 
 java {
