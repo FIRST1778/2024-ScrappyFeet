@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import org.chillout1778.commands.FlywheelFastCommand
+import org.chillout1778.commands.RollerSetCommand
 import org.chillout1778.subsystems.Flywheels
+import org.chillout1778.subsystems.Rollers
 
 /**
  * The VM is configured to automatically run this object (which basically functions as a singleton class),
@@ -27,6 +29,7 @@ object Robot : TimedRobot()
 
     override fun robotInit()
     {
+        Controls
         // Report the use of the Kotlin Language for "FRC Usage Report" statistics
         HAL.report(tResourceType.kResourceType_Language, tInstances.kLanguage_Kotlin, 0, WPILibVersion.Version)
         // Access the RobotContainer object so that it is initialized. This will perform all our
@@ -51,94 +54,9 @@ object Robot : TimedRobot()
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
     override fun autonomousInit()
     {
+        FlywheelFastCommand().andThen(RollerSetCommand(Rollers.State.SUCK)).schedule()
     }
 
     override fun autonomousPeriodic()
@@ -148,7 +66,7 @@ object Robot : TimedRobot()
 
     override fun teleopInit()
     {
-        (FlywheelFastCommand().andThen(Commands.runOnce({println("Flywheel is fast now!")}))).schedule()
+
     }
 
     /** This method is called periodically during operator control.  */
