@@ -1,0 +1,519 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"spee",
+				"speedMetersPerSecond"
+			],
+			[
+				"Swerve",
+				"SwerveDriveOdometry"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/main/java/org/chillout1778/Constants.kt",
+			"settings":
+			{
+				"buffer_size": 1721,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/simon/f24scrap",
+		"/home/simon/f24scrap/src",
+		"/home/simon/f24scrap/src/main",
+		"/home/simon/f24scrap/src/main/java",
+		"/home/simon/f24scrap/src/main/java/org",
+		"/home/simon/f24scrap/src/main/java/org/chillout1778"
+	],
+	"file_history":
+	[
+		"/home/simon/f24scrap/frc.sublime-project",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/Swerve.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/Constants.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/drive/DriveCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/SwerveModule.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/lights/AsdfCommand.kt",
+		"/home/simon/f24robot/build.gradle",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/Lights.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/lights/LEDCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/lights/RainbowCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/ShooterWrist.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/climber/ClimberZeroCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/Robot.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/drive/RumbleCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/lights/PerlinNoiseCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/LEDCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/shooter/AutoShootCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/shooter/ShooterShootCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/IntakeWrist.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/intake/IntakeAngleCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/Util.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/drive/AutoAlignCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/Controls.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/Vision.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/LimelightHelpers.java",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/drive/AlignToShootCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/shooter/ShooterTrackCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/ShooterRollers.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/StateMachine.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/controls/Coherent2dStick.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/controls/CoherentMapBuilder.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/shooter/ShooterAngleCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/shooter/ShooterStoreCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/IntakeRollers.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/intake/IntakeSuckCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/intake/IntakeDownCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/intake/IntakeUpCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/shooter/ShooterSuckCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/statemachine/IdleState.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/statemachine/ShootState.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/statemachine/ReadyState.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/statemachine/IState.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/statemachine/IntakeState.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/ClimberHook.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/climber/ClimberExtendCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/Climber.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/statemachine/AngleState.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/StateMachineCommand.kt",
+		"/home/simon/ext/allwpilib/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/sysid/Robot.java",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/climber/ClimberLiftBothMotorCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/Shooter.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/drive/FaceAprilTagCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/intake/IntakeState.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/IntakeUpCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/IntakeDownCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/Intake.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/COEncoder.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/COMotor.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/lib/COCanCoder.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/commands/FaceAprilTagCommand.kt",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/IntakeRoller.kt",
+		"/home/simon/f24robot/vendordeps/REVLib.json",
+		"/home/simon/f24robot/src/main/java/org/chillout1778/subsystems/Controls.kt",
+		"/home/simon/f24robot/src/main/deploy/choreo/NewPath.traj",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/subsystems/Swerve.kt",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/Robot.kt",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/subsystems/Shooter.kt",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/subsystems/SwerveModule.kt",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/RobotContainer.kt",
+		"/home/simon/f23kitbot/build.gradle",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/commands/DriveCommand.kt",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/lib/Util.kt",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/Constants.kt",
+		"/home/simon/f23kitbot/vendordeps/Phoenix.json",
+		"/home/simon/f23kitbot/vendordeps/PathPlannerLib.json",
+		"/home/simon/f23kitbot/kitbot.sublime-project",
+		"/tmp/asdf/src/main/java/org/chillout1778/commands/DriveCommand.kt",
+		"/tmp/asdf/build.gradle",
+		"/tmp/asdf/src/main/java/org/chillout1778/subsystems/SwerveModule.kt",
+		"/tmp/asdf/src/main/java/org/chillout1778/subsystems/Swerve.kt",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/subsystems/Controls.kt",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/subsystems/Gyro.kt",
+		"/home/simon/f23kitbot/swervecalc.py",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/commands/DriveBrakeCommand.kt",
+		"/home/simon/f23kitbot/src/main/java/org/chillout1778/commands/AutonomousCommand.kt",
+		"/home/simon/2023-robot/src/main/java/org/frc1778/Constants.kt",
+		"/home/simon/2023-robot/src/main/java/org/frc1778/lib/FalconSwerveDrivetrain.kt",
+		"/home/simon/2023-kitbot/asdf.sublime-project",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/commands/DriveCommand.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/Main.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/subsystems/Gyro.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/Robot.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/commands/AutonomousCommand.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/subsystems/Controls.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/subsystems/Drive.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/subsystems/LineBreak.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/Constants.java",
+		"/home/simon/2023-kitbot/LICENSE",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/LineBreak.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/MotorSpin.java",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/Drive.java",
+		"/home/simon/2023-kitbot/build.gradle",
+		"/home/simon/2023-kitbot/src/main/java/org/chillout1778/Swerve.java"
+	],
+	"find":
+	{
+		"height": 31.0
+	},
+	"find_in_files":
+	{
+		"height": 113.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/main/java/org/chillout1778/Constants.kt",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 1721,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Kotlin/Kotlin.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 31.0
+	},
+	"input":
+	{
+		"height": 43.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "frc.sublime-project",
+	"replace":
+	{
+		"height": 58.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Swerve",
+				"src/main/java/org/chillout1778/subsystems/Swerve.kt"
+			],
+			[
+				"Constants",
+				"src/main/java/org/chillout1778/Constants.kt"
+			],
+			[
+				"drivecom",
+				"src/main/java/org/chillout1778/commands/drive/DriveCommand.kt"
+			],
+			[
+				"SwerveMod",
+				"src/main/java/org/chillout1778/subsystems/SwerveModule.kt"
+			],
+			[
+				"Swerve.kt",
+				"src/main/java/org/chillout1778/subsystems/Swerve.kt"
+			],
+			[
+				"ShooterWrist.kt",
+				"src/main/java/org/chillout1778/subsystems/ShooterWrist.kt"
+			],
+			[
+				"Con",
+				"src/main/java/org/chillout1778/Constants.kt"
+			],
+			[
+				"Constan",
+				"src/main/java/org/chillout1778/Constants.kt"
+			],
+			[
+				"Constn",
+				"src/main/java/org/chillout1778/Constants.kt"
+			],
+			[
+				"Constants.kt",
+				"src/main/java/org/chillout1778/Constants.kt"
+			],
+			[
+				"ShooterRollers",
+				"src/main/java/org/chillout1778/subsystems/ShooterRollers.kt"
+			],
+			[
+				"Consta",
+				"src/main/java/org/chillout1778/Constants.kt"
+			],
+			[
+				"take.kt",
+				"src/main/java/org/chillout1778/subsystems/IntakeWrist.kt"
+			],
+			[
+				"angle",
+				"src/main/java/org/chillout1778/commands/intake/IntakeAngleCommand.kt"
+			],
+			[
+				"takewri",
+				"src/main/java/org/chillout1778/subsystems/IntakeWrist.kt"
+			],
+			[
+				"",
+				"build.gradle"
+			],
+			[
+				"SwerveM",
+				"src/main/java/org/chillout1778/subsystems/SwerveModule.kt"
+			],
+			[
+				"Control",
+				"src/main/java/org/chillout1778/Controls.kt"
+			],
+			[
+				"Climber.kt",
+				"src/main/java/org/chillout1778/subsystems/Climber.kt"
+			],
+			[
+				"Climber",
+				"src/main/java/org/chillout1778/commands/climber/ClimberExtendCommand.kt"
+			],
+			[
+				"ClimberExt",
+				"src/main/java/org/chillout1778/commands/climber/ClimberExtendCommand.kt"
+			],
+			[
+				"Rolers",
+				"src/main/java/org/chillout1778/subsystems/IntakeRollers.kt"
+			],
+			[
+				"Intake.kt",
+				"src/main/java/org/chillout1778/subsystems/IntakeWrist.kt"
+			],
+			[
+				"IntakeUp",
+				"src/main/java/org/chillout1778/commands/IntakeUpCommand.kt"
+			],
+			[
+				"Robot",
+				"src/main/java/org/chillout1778/Robot.kt"
+			],
+			[
+				"SwreveM",
+				"src/main/java/org/chillout1778/subsystems/SwerveModule.kt"
+			],
+			[
+				"Util",
+				"src/main/java/org/chillout1778/lib/Util.kt"
+			],
+			[
+				"Robot.kt",
+				"src/main/java/org/chillout1778/Robot.kt"
+			],
+			[
+				"Shooter",
+				"src/main/java/org/chillout1778/subsystems/Shooter.kt"
+			],
+			[
+				"RobotConta",
+				"src/main/java/org/chillout1778/RobotContainer.kt"
+			],
+			[
+				"RobotContainer",
+				"src/main/java/org/chillout1778/RobotContainer.kt"
+			],
+			[
+				"build.gra",
+				"build.gradle"
+			],
+			[
+				"project",
+				"kitbot.sublime-project"
+			],
+			[
+				"DriveC",
+				"src/main/java/org/chillout1778/commands/DriveCommand.kt"
+			],
+			[
+				"DriveCom",
+				"src/main/java/org/chillout1778/commands/DriveCommand.kt"
+			],
+			[
+				"Mod",
+				"src/main/java/org/chillout1778/subsystems/SwerveModule.kt"
+			],
+			[
+				"gra",
+				"build.gradle"
+			],
+			[
+				"TeleopSwerve",
+				"src/main/java/org/chillout1778/commands/TeleopSwerve.kt"
+			],
+			[
+				"Teleop",
+				"src/main/java/org/chillout1778/commands/TeleopSwerve.kt"
+			],
+			[
+				"Const",
+				"src/main/java/org/chillout1778/Constants.kt"
+			],
+			[
+				"COnstants",
+				"src/main/java/org/chillout1778/Constants.kt"
+			],
+			[
+				"robot.kt",
+				"src/main/java/org/chillout1778/Robot.kt"
+			],
+			[
+				"Gyro",
+				"src/main/java/org/chillout1778/subsystems/Gyro.kt"
+			],
+			[
+				"Controls",
+				"src/main/java/org/chillout1778/subsystems/Controls.kt"
+			],
+			[
+				"swervemod",
+				"src/main/java/org/chillout1778/subsystems/SwerveModule.kt"
+			],
+			[
+				"DriveComa",
+				"src/main/java/org/chillout1778/commands/DriveCommand.kt"
+			],
+			[
+				"Gyro.kt",
+				"src/main/java/org/chillout1778/subsystems/Gyro.kt"
+			],
+			[
+				"FalconSwerveDrive",
+				"src/main/java/org/frc1778/lib/FalconSwerveDrivetrain.kt"
+			],
+			[
+				"Auto",
+				"src/main/java/org/chillout1778/commands/AutonomousCommand.java"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 372.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

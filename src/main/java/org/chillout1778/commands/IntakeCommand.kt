@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import org.chillout1778.Robot
 import org.chillout1778.lib.LimelightHelpers
 import org.chillout1778.subsystems.CenteringWheels
-import org.chillout1778.subsystems.CenteringWheels.passiveSpit
 import org.chillout1778.subsystems.Shooter
 
 class IntakeCommand: Command(){
@@ -20,7 +19,7 @@ class IntakeCommand: Command(){
 
     override fun end(interrupted: Boolean) {
         Shooter.stopRollers()
-        passiveSpit()
+        CenteringWheels.passiveSpit()
         if(!interrupted)
             LimelightFlashCommand().schedule()
     }
