@@ -36,6 +36,7 @@ object Robot : TimedRobot()
         // button bindings, and put our autonomous chooser on the dashboard.
         val controller = CommandXboxController(3)
         controller.leftTrigger().whileTrue(FlywheelFastCommand())
+
     }
 
 
