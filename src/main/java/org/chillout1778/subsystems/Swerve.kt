@@ -4,9 +4,7 @@ import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj2.command.Subsystem
-import org.chillout1778.Constants
 
 object Swerve: Subsystem {
     val modules = arrayOf(
