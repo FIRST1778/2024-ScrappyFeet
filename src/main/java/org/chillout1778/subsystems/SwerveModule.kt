@@ -1,7 +1,7 @@
 package org.chillout1778.subsystems
 
-import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
+import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
@@ -11,8 +11,9 @@ class SwerveModule(
     driveMotorID: Int,
     turnMotorID: Int,
     canCoderID: Int,
-    val inverted: InvertedValue,
-    ) {
+    val driveInverted: InvertedValue,
+    val turnInverted: InvertedValue
+) {
     val driveMotor : TalonFX
     val turnMotor : TalonFX
     val canCoder : CANcoder
@@ -22,13 +23,26 @@ class SwerveModule(
         canCoder = CANcoder(canCoderID)
 
         driveMotor.configurator.apply(
-            MotorOutputConfigs().withInverted(inverted)
+            TalonFXConfiguration()
+        )
+        turnMotor.configurator.apply(
+            TalonFXConfiguration()
         )
         driveMotor.configurator.apply(
-            FeedbackConfigs()
-                .withRotorToSensorRatio(1.0)
-                .withSensorToMechanismRatio(1.0)
+            MotorOutputConfigs().withInverted(driveInverted),
         )
+        turnMotor.configurator.apply(
+                MotorOutputConfigs().withInverted(turnInverted)
+                )
     }
-    val turnPID = Constants.Swerve.turnPID
+    val turnPID = Constants.Swerve.makeTurnPID()
+
+    fun turnPosition() : Double {
+        return turnMotor.position.valueAsDouble * 2 * Math.PI
+    }
+    fun drive(angle : Double, driveVelocity : Double) {
+        val turnVoltage = turnPID.calculate(turnPosition(), angle)
+        turnMotor.setVoltage(turnVoltage)
+        driveMotor.setVoltage(driveVelocity * Constants.Swerve.MAX_SPEED / 12)
+    }
 }

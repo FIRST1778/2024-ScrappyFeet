@@ -18,7 +18,11 @@ object Constants {
         const val BACK_RIGHT_ENCODER_ID = 11
         const val BACK_LEFT_ENCODER_ID = 12
 
+        const val MAX_SPEED = 1
+
         const val DRIVE_REDUCTION = 1.0 / 5.35714285714
-        val turnPID = PIDController(7.0, 0.0, 0.0)
+        fun makeTurnPID(): PIDController {
+            return PIDController(0.4, 0.0, 0.01)
+        }
     }
 }
