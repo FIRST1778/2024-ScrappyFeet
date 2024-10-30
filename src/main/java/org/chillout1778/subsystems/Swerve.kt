@@ -18,12 +18,17 @@ object Swerve: Subsystem {
         Translation2d(1.0,-1.0),
         Translation2d(-1.0,1.0),
         Translation2d(-1.0,-1.0))
+
+
     fun driveRobotRelative(x: Double, y: Double, rotation: Double) {
+
         val chassisSpeeds = ChassisSpeeds(x,y,rotation)
         val moduleStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds)
+
         for (i in modules.indices) {
             modules[i].drive(angle = moduleStates[i].angle.radians,
                 driveVelocity = moduleStates[i].speedMetersPerSecond)
         }
     }
+
 }
