@@ -48,6 +48,4 @@ class SwerveModule(
         turnMotor.setVoltage(turnVoltage)
         driveMotor.setVoltage(driveVelocity * Constants.Swerve.MAX_SPEED / 12)
     }
-
-    var canCoderOffset: Double = 0.0 // TODO
 }

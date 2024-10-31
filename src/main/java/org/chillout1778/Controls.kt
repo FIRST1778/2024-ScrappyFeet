@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import org.chillout1778.commands.FlywheelFastCommand
 import org.chillout1778.commands.RollerSetCommand
 import org.chillout1778.subsystems.Rollers
-import org.chillout1778.commands.SaveSwerveModuleOffsetsCommand
 
 object Controls {
     val driver = CommandXboxController(0)
@@ -36,8 +35,6 @@ object Controls {
             .whileTrue(RollerSetCommand(Rollers.State.SUCK))
         driver.b()// Spit
             .whileTrue(RollerSetCommand(Rollers.State.SPIT))
-        driver.x()
-            .whileTrue(SaveSwerveModuleOffsetsCommand())
     }
 
 }
