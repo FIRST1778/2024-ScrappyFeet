@@ -49,7 +49,5 @@ class SwerveModule(
         driveMotor.setVoltage(driveVelocity * Constants.Swerve.MAX_SPEED / 12)
     }
 
-    var setCanCoderOffset(radians: Double) {
-        // TODO
-    }
+    var canCoderOffset: Double = 0.0 // TODO
 }

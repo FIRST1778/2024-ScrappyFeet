@@ -34,12 +34,15 @@ object Swerve: Subsystem {
         }
     }
 
+    val swerveOffsetPath = "${System.getProperty("user.home")}/swerve-offsets.txt"
+
     fun initializeSwerveOffsets() {
-        val path = "${System.getProperty("user.home")}/swerve-offsets.txt"
         val text = try {
-            File(path).readText()
+            File(swerveOffsetPath).readText()
         } catch (e: FileNotFoundException) {
-            DriverStation.reportError("COULD NOT READ SWERVE OFFSETS: $e")
+            DriverStation.reportError(
+                "COULD NOT READ SWERVE OFFSETS: $e", false
+            )
             return
         }
 
@@ -47,13 +50,16 @@ object Swerve: Subsystem {
             .split(Regex("\\s+"))
             .map(String::toDoubleOrNull)
             .filterNotNull()
-        if (offsets.length < modules.length) {
-            reportErrorLoudly("COULD NOT READ SWERVE OFFSETS: needed ${modules.length}, got ${offsets.length}")
+        if (offsets.size < modules.size) {
+            DriverStation.reportError(
+                "COULD NOT READ SWERVE OFFSETS: needed ${modules.size}, got ${offsets.size}",
+                false
+            )
             return
         }
 
-        for (module, offset in modules.zip(offsets)) {
-            module.setCanCoderOffset(offset)
+        for ((module, offset) in modules.zip(offsets)) {
+            module.canCoderOffset = offset
         }
     }
 }
