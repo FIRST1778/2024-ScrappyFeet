@@ -62,4 +62,10 @@ object Swerve: Subsystem {
             module.canCoderOffset = offset
         }
     }
+
+    fun saveSwerveOffsets() {
+        val offsets = modules.map(SwerveModule::turnPosition)
+        File(swerveOffsetPath).writeText("${offsets.joinToString(" ")}\n")
+        DriverStation.reportWarning("Saved swerve offsets", false)
+    }
 }
