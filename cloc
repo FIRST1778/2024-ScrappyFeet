@@ -1,0 +1,16 @@
+#!/bin/sh
+# SPDX-License-Identifier: CC0
+
+# Count lines of Kotlin code in the repository.  Empty lines and import
+# statements are ignored.
+
+printf 'loc\tfile\n========================================\n'
+find . -name '*.kt' -exec awk '
+	BEGIN { OFS = "\t" }
+	/[^[:space:]]/ && !/^import/ {loc++}
+	END { print loc, gensub("./", "", 1, FILENAME) }
+' {} \; | sort -nrk1 | awk '
+	{ tot += $1; print }
+	END { print "========================================"
+	      print "total: " tot }
+'
