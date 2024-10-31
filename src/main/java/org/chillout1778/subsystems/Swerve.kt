@@ -4,7 +4,10 @@ import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Subsystem
+import java.io.File
+import java.io.FileNotFoundException
 
 object Swerve: Subsystem {
     val modules = arrayOf(
@@ -31,4 +34,26 @@ object Swerve: Subsystem {
         }
     }
 
+    fun initializeSwerveOffsets() {
+        val path = "${System.getProperty("user.home")}/swerve-offsets.txt"
+        val text = try {
+            File(path).readText()
+        } catch (e: FileNotFoundException) {
+            DriverStation.reportError("COULD NOT READ SWERVE OFFSETS: $e")
+            return
+        }
+
+        val offsets = text
+            .split(Regex("\\s+"))
+            .map(String::toDoubleOrNull)
+            .filterNotNull()
+        if (offsets.length < modules.length) {
+            reportErrorLoudly("COULD NOT READ SWERVE OFFSETS: needed ${modules.length}, got ${offsets.length}")
+            return
+        }
+
+        for (module, offset in modules.zip(offsets)) {
+            module.setCanCoderOffset(offset)
+        }
+    }
 }
