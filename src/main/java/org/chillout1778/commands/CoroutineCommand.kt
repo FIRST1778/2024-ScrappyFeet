@@ -30,21 +30,22 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
 
     private var continuation: Continuation<Unit>? = null
 
-    suspend fun yield() = suspendCoroutineUninterceptedOrReturn { c ->
+    suspend fun yield() = suspendCoroutine { c ->
         continuation = c
-        COROUTINE_SUSPENDED
     }
 
     override fun initialize() {
-        continuation = this::runRoutine.createCoroutine(object : Continuation<Unit> {
-            override val context: CoroutineContext = EmptyCoroutineContext
-            override fun resumeWith(result: Result<Unit>) {
-                result.onFailure { e ->
-                    println("caught exception thrown in coroutine: $e")
+        continuation = this::runRoutine.createCoroutine(
+            Continuation(
+                context = EmptyCoroutineContext,
+                resumeWith = { result ->
+                    result.onFailure { e ->
+                        println("caught exception thrown in coroutine: $e")
+                    }
+                    continuation = null
                 }
-                continuation = null
-            }
-        })
+            )
+        )
         continuation!!.resume(Unit)
     }
 
@@ -56,10 +57,9 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
 
     override fun end(interrupted: Boolean) {
         if (interrupted) {
-            continuation!!.resumeWithException(CancellationException(
-                message = "command was canceled by WPILib",
-                cause = null
-            ))
+            continuation!!.resumeWithException(
+                CancellationException("command canceled by WPILib", cause = null)
+            )
         }
     }
 }
