@@ -1,12 +1,17 @@
 package org.chillout1778.commands
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.Command
 import org.chillout1778.Controls
 import org.chillout1778.subsystems.Swerve
+import kotlin.math.atan
+import kotlin.math.cos
+import kotlin.math.hypot
+import kotlin.math.sin
 
-class TeleopDriveCommand(val driver: CommandXboxController): Command() {
-    val deadband: Double = 0.1
+class TeleopDriveCommand(private val driver: CommandXboxController): Command() {
+    private val deadband: Double = 0.1
 
     override fun execute() {
         // With the WPILib coordinate system, x is forward and y is to
@@ -19,8 +24,8 @@ class TeleopDriveCommand(val driver: CommandXboxController): Command() {
         // Convert (x,y) into polar coordinates so that we can
         // manipulate magnitude (r) instead of separately manipulating
         // x and y.  This works better for squaring and for deadbands.
-        val theta = Math.atan(y/x)
-        var r = Math.hypot(x, y)
+        val theta = atan(y/x)
+        var r = hypot(x, y)
 
         // Clamp or deadband r if necessary.  The value r will always be
         // positive because theta represents the angle and r the
@@ -53,9 +58,9 @@ class TeleopDriveCommand(val driver: CommandXboxController): Command() {
         r = r*r
 
         // Now convert back to rectangular coordinates.
-        val newX = r * Math.cos(theta)
-        val newY = r * Math.sin(theta)
+        val newX = r * cos(theta)
+        val newY = r * sin(theta)
 
-        Swerve.driveFieldRelative(x = newX, y = newY, rotation = rotation)
+        Swerve.driveFieldRelative(ChassisSpeeds(newX, newY, rotation))
     }
 }
