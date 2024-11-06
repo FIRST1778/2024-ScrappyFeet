@@ -9,21 +9,19 @@ object Controls {
     val driver = CommandXboxController(0)
 
     fun getDriveSpeed() : Double {
-        val triggerSpeed = 1 - (0.75 * driver.leftTriggerAxis)
-        val joystickSpeed = Math.hypot(driver.leftX, driver.leftY)
-        return joystickSpeed * triggerSpeed
+        return 1 - (0.75 * driver.leftTriggerAxis)
     }
 
     fun getDriveX() : Double {
-        Utils.deadZone(Math.pow(return driver.leftX * Constants.Swerve.MAX_SPEED * getDriveSpeed(), 2.0), 0.1)
+        return Utils.deadZone(Math.pow(driver.leftX * Constants.Swerve.MAX_SPEED * getDriveSpeed(), 2.0), 0.1)
     }
 
     fun getDriveY() : Double {
-        Utils.deadZone(Math.pow(return driver.leftY * Constants.Swerve.MAX_SPEED * getDriveSpeed(), 2.0), 0.1)
+        return Utils.deadZone(Math.pow(driver.leftY * Constants.Swerve.MAX_SPEED * getDriveSpeed(), 2.0), 0.1)
     }
 
     fun getDriveR() : Double {
-        Utils.deadZone(Math.pow(return driver.rightX * Constants.Swerve.MAX_SPEED * getDriveSpeed(), 2.0), 0.1)
+        return Utils.deadZone(Math.pow(driver.rightX * Constants.Swerve.MAX_SPEED * getDriveSpeed(), 2.0), 0.1)
     }
 
 
