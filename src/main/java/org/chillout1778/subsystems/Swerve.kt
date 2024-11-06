@@ -1,36 +1,66 @@
 package org.chillout1778.subsystems
 
 import com.ctre.phoenix6.signals.InvertedValue
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.wpilibj2.command.Subsystem
 
 object Swerve: Subsystem {
-    val modules = arrayOf(
-        SwerveModule(1,5,9, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive),
-        SwerveModule(2, 6, 10, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive),
-        SwerveModule(3, 7, 11, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive),
-        SwerveModule(4, 8, 12, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive)
+
+    private fun robotAngle(): Double {
+        return 0.0 // TODO
+    }
+
+    private val modules = arrayOf(
+        SwerveModule(
+            driveMotorID = 1, turnMotorID = 5, canCoderID = 9,
+            driveInverted = InvertedValue.CounterClockwise_Positive,
+            turnInverted  = InvertedValue.CounterClockwise_Positive,
+            canCoderOffsetDegrees = 0.0,
+        ),
+        SwerveModule(
+            driveMotorID = 2, turnMotorID = 6, canCoderID = 10,
+            driveInverted = InvertedValue.CounterClockwise_Positive,
+            turnInverted  = InvertedValue.CounterClockwise_Positive,
+            canCoderOffsetDegrees = 0.0,
+        ),
+        SwerveModule(
+            driveMotorID = 3, turnMotorID = 7, canCoderID = 11,
+            driveInverted = InvertedValue.CounterClockwise_Positive,
+            turnInverted  = InvertedValue.CounterClockwise_Positive,
+            canCoderOffsetDegrees = 0.0,
+        ),
+        SwerveModule(
+            driveMotorID = 4, turnMotorID = 8, canCoderID = 12,
+            driveInverted = InvertedValue.CounterClockwise_Positive,
+            turnInverted  = InvertedValue.CounterClockwise_Positive,
+            canCoderOffsetDegrees = 0.0,
+        )
     )
 
-    val swerveKinematics = SwerveDriveKinematics(
+    private val swerveKinematics = SwerveDriveKinematics(
         Translation2d(1.0, 1.0),
         Translation2d(1.0,-1.0),
         Translation2d(-1.0,1.0),
         Translation2d(-1.0,-1.0)
     )
 
-    fun driveFieldRelative(x: Double, y: Double, rotation: Double) {
-        // TODO
+    fun driveFieldRelative(speeds: ChassisSpeeds) {
+        driveRobotRelative(
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                speeds,
+                Rotation2d.fromRadians(robotAngle())
+            )
+        )
     }
 
-    fun driveRobotRelative(x: Double, y: Double, rotation: Double) {
-        val chassisSpeeds = ChassisSpeeds(x,y,rotation)
-        val moduleStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds)
-
+    fun driveRobotRelative(speeds: ChassisSpeeds) {
+        val discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02)
+        val moduleStates = swerveKinematics.toSwerveModuleStates(discreteSpeeds)
         for ((mod, state) in modules.zip(moduleStates)) {
-            mod.drive(angle = state.angle.radians, driveVelocity = state.speedMetersPerSecond)
+            mod.driveState(state)
         }
     }
 }

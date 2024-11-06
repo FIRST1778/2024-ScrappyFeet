@@ -1,4 +1,5 @@
 package org.chillout1778.commands
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Subsystem
 import kotlin.coroutines.*
@@ -20,6 +21,13 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
 
     suspend fun waitForever() {
         while (true) yield()
+    }
+
+    suspend fun waitSeconds(seconds: Double) {
+        val timer = Timer()
+        timer.start()
+        while (!timer.hasElapsed(seconds))
+            yield()
     }
 
     suspend fun waitTicks(n: Int) {
