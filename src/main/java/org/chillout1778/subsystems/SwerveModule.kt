@@ -23,7 +23,7 @@ class SwerveModule(
     canCoderID: Int,
     canCoderOffsetDegrees: Double,
     driveInverted: InvertedValue,
-    turnInverted: InvertedValue,
+    turnInverted: InvertedValue
 ) : Sendable {
     object Constants {
         val WHEEL_RADIUS = Units.inchesToMeters(2.0)
@@ -55,10 +55,16 @@ class SwerveModule(
     private val drivePID = Constants.makeDrivePID()
     private val driveFeedforward = Constants.makeDriveFeedforward()
 
+    private fun driveVelocity(): Double {
+        return driveMotor.velocity.valueAsDouble * 2*PI * Constants.WHEEL_RADIUS
+    }
+    // driveVelocity()
+
     private val turnPosition: Double
         get() = turnMotor.position.valueAsDouble * 2*PI
     private val driveVelocity: Double
         get() = driveMotor.velocity.valueAsDouble * 2*PI * Constants.WHEEL_RADIUS
+    // driveVelocity (property syntax; syntax sugar)
     private val driveAcceleration: Double
         get() = driveMotor.acceleration.valueAsDouble * 2*PI * Constants.WHEEL_RADIUS
 
