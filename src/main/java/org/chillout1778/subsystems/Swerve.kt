@@ -6,8 +6,17 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.wpilibj2.command.Subsystem
+import org.chillout1778.Controls
+import org.chillout1778.commands.TeleopDriveCommand
 
 object Swerve: Subsystem {
+    object Constants {
+        val MAX_SPEED = 6.0
+    }
+
+    init {
+        defaultCommand = TeleopDriveCommand(Controls.driver)
+    }
 
     private fun robotAngle(): Double {
         return 0.0 // TODO
