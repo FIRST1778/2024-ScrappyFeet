@@ -43,6 +43,7 @@ object Robot : TimedRobot()
     override fun robotPeriodic()
     {
         CommandScheduler.getInstance().run()
+        println("Skibitty robot")
     }
 
     override fun disabledInit()
