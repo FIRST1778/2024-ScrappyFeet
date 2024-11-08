@@ -5,10 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.Command
 import org.chillout1778.Controls
 import org.chillout1778.subsystems.Swerve
-import kotlin.math.atan
-import kotlin.math.cos
-import kotlin.math.hypot
-import kotlin.math.sin
+import kotlin.math.*
 
 class TeleopDriveCommand(private val driver: CommandXboxController): Command() {
     private val deadband: Double = 0.1
@@ -24,7 +21,7 @@ class TeleopDriveCommand(private val driver: CommandXboxController): Command() {
         // Convert (x,y) into polar coordinates so that we can
         // manipulate magnitude (r) instead of separately manipulating
         // x and y.  This works better for squaring and for deadbands.
-        val theta = atan(y/x)
+        val theta = atan2(y, x)
         var r = hypot(x, y)
 
         // Clamp or deadband r if necessary.  The value r will always be
