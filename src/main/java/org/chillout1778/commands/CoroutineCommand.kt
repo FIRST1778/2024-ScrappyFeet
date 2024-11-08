@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Subsystem
 import kotlin.coroutines.*
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.coroutines.intrinsics.*
 
 abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
     init {
@@ -14,8 +13,8 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
     // Implement this function in your derived class.
     abstract suspend fun runRoutine()
 
-    suspend fun wait(pred: () -> Boolean) {
-        while (!pred())
+    suspend fun wait(predicate: () -> Boolean) {
+        while (!predicate())
             yield()
     }
 
@@ -26,8 +25,7 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
     suspend fun waitSeconds(seconds: Double) {
         val timer = Timer()
         timer.start()
-        while (!timer.hasElapsed(seconds))
-            yield()
+        wait { timer.hasElapsed(seconds)}
     }
 
     suspend fun waitTicks(n: Int) {
@@ -38,8 +36,8 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
 
     private var continuation: Continuation<Unit>? = null
 
-    suspend fun yield() = suspendCoroutine { c ->
-        continuation = c
+    suspend fun yield() = suspendCoroutine { cont ->
+        continuation = cont
     }
 
     override fun initialize() {
@@ -47,8 +45,10 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
             Continuation(
                 context = EmptyCoroutineContext,
                 resumeWith = { result ->
-                    result.onFailure { e ->
-                        println("caught exception thrown in coroutine: $e")
+                    result.onFailure { exception ->
+                        if (!(exception is CancellationException)) {
+                            println("caught exception thrown in coroutine: $exception")
+                        }
                     }
                     continuation = null
                 }
