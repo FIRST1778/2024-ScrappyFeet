@@ -1,9 +1,11 @@
 package org.chillout1778.commands
 
-import org.chillout1778.subsystems.Rollers
+import edu.wpi.first.wpilibj2.command.Subsystem
 import kotlin.coroutines.cancellation.CancellationException
 
-class AsdfCommand: CoroutineCommand(Rollers) {
+class CoroutineIntakeCommand: CoroutineCommand(Rollers) {
+    // Not a real command
+
     override suspend fun runRoutine() {
         try {
             Rollers.startIntaking()
@@ -18,5 +20,13 @@ class AsdfCommand: CoroutineCommand(Rollers) {
             Rollers.stopFlywheels()
         }
     }
-    // end of runRoutine
+
+    // More fake components (see ElevatorShootCommand)
+    object Rollers: Subsystem {
+        fun startIntaking() {}
+        fun stopIntaking() {}
+        fun reverseFlywheels() {}
+        fun stopFlywheels() {}
+        fun haveNote() = false
+    }
 }
