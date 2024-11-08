@@ -16,6 +16,7 @@ object Swerve: Subsystem {
 
     init {
         defaultCommand = TeleopDriveCommand(Controls.driver)
+        // defaultCommand = TeleopGasPedalDriveCommand(Controls.driver)
     }
 
     private fun robotAngle(): Double {
