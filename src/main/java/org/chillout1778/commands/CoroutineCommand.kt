@@ -13,6 +13,9 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
     // Implement this function in your derived class.
     abstract suspend fun runRoutine()
 
+    // The following functions are abstractions on top of yield().
+    // Almost all usage patterns will find these functions more readable
+    // than directly calling yield().
     suspend fun wait(predicate: () -> Boolean) {
         while (!predicate())
             yield()
@@ -26,6 +29,7 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
         val timer = Timer()
         timer.start()
         wait { timer.hasElapsed(seconds)}
+        timer.stop()
     }
 
     suspend fun waitTicks(n: Int) {
@@ -34,6 +38,7 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
         }
     }
 
+    // Actual implementation of the coroutines.
     private var continuation: Continuation<Unit>? = null
 
     suspend fun yield() = suspendCoroutine { cont ->

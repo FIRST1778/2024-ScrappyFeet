@@ -14,7 +14,7 @@ class CoroutineIntakeCommand: CoroutineCommand(Rollers) {
             waitSeconds(0.1)
             Rollers.stopFlywheels()
         } catch (e: CancellationException) {
-            println("AsdfCommand got interrupted!")
+            println("${this::class.simpleName} got interrupted!")
         } finally {
             Rollers.stopIntaking()
             Rollers.stopFlywheels()
