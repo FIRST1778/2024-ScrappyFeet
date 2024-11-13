@@ -9,6 +9,12 @@ import edu.wpi.first.wpilibj2.command.Subsystem
 import org.chillout1778.Controls
 import org.chillout1778.commands.TeleopDriveCommand
 
+// Swerve inverse kinematics:
+//   https://dominik.win/blog/programming-swerve-drive/
+//   https://abhinavwastaken.medium.com/using-inverse-kinematics-to-become-a-master-swerver-1026759d81b0
+//   https://www.chiefdelphi.com/uploads/default/original/3X/e/f/ef10db45f7d65f6d4da874cd26db294c7ad469bb.pdf
+//   https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964
+
 object Swerve: Subsystem {
     object Constants {
         val MAX_SPEED = 6.0
