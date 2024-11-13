@@ -1,8 +1,11 @@
 package org.chillout1778
 
+import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
+import edu.wpi.first.util.sendable.Sendable
+import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
@@ -24,18 +27,20 @@ import org.chillout1778.subsystems.Rollers
  * the `Main.kt` file in the project. (If you use the IDE's Rename or Move refactorings when renaming the
  * object or package, it will get changed everywhere.)
  */
-object Robot : TimedRobot()
-{
+object Robot : TimedRobot(), Sendable
+{   val motor = TalonFX(1)
 
+
+    override fun initSendable(builder: SendableBuilder?) {
+        builder!!.addDoubleProperty("Motor speed (rpm)", {motor.velocity.valueAsDouble}, {})
+    }
     override fun robotInit()
     {
         Controls
         // Report the use of the Kotlin Language for "FRC Usage Report" statistics
         HAL.report(tResourceType.kResourceType_Language, tInstances.kLanguage_Kotlin, 0, WPILibVersion.Version)
         // Access the RobotContainer object so that it is initialized. This will perform all our
-        // button bindings, and put our autonomous chooser on the dashboard.
-        val controller = CommandXboxController(3)
-        controller.leftTrigger().whileTrue(FlywheelFastCommand())
+        // button bindings, and put our autonomous chooser on the dashboard
 
     }
 
@@ -43,7 +48,6 @@ object Robot : TimedRobot()
     override fun robotPeriodic()
     {
         CommandScheduler.getInstance().run()
-        println("Skibitty robot")
     }
 
     override fun disabledInit()
@@ -74,7 +78,12 @@ object Robot : TimedRobot()
     /** This method is called periodically during operator control.  */
     override fun teleopPeriodic()
     {
-
+        if (Controls.driver.getRawAxis(4) > 0.5) {
+            motor.setVoltage(2.0)
+        } else {
+            motor.setVoltage(0.0)
+        }
+        println(motor.velocity.valueAsDouble)
     }
 
     override fun testInit()

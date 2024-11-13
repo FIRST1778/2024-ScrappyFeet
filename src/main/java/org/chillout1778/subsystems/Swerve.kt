@@ -12,7 +12,7 @@ import org.chillout1778.commands.TeleopDriveCommand
 object Swerve: Subsystem {
 
     init {
-        defaultCommand = TeleopDriveCommand(Controls.driver)
+//        defaultCommand = TeleopDriveCommand(Controls.driver)
     }
 
     private fun robotAngle(): Double {
