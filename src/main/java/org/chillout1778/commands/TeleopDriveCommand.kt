@@ -3,23 +3,29 @@ package org.chillout1778.commands
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.Command
-import org.chillout1778.Controls
-import org.chillout1778.subsystems.Swerve
+import java.util.function.Supplier
 import kotlin.math.atan
 import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.sin
+import org.chillout1778.Controls
+import org.chillout1778.Controls.DriveInputs
+import org.chillout1778.subsystems.Swerve
 
-class TeleopDriveCommand(private val driver: CommandXboxController): Command() {
+class TeleopDriveCommand(
+    private val driveInputsSupplier: Supplier<DriveInputs>
+) : Command() {
+
     private val deadband: Double = 0.1
 
     override fun execute() {
         // With the WPILib coordinate system, x is forward and y is to
-        // the left.  (This is for the blue side, so TODO later we'll
-        // worry about inverting this for red.)
-        val x = driver.leftY     // forward
-        val y = -driver.leftX    // left
-        val rotation = driver.rightX  // counterclockwise
+        // the left.  This is for the blue side, so TODO: invert this
+        // for red alliance.
+        val inputs = driveInputsSupplier.get()
+        val x = inputs.forward
+        val y = inputs.left
+        val rotation = inputs.rotation
 
         // Convert (x,y) into polar coordinates so that we can
         // manipulate magnitude (r) instead of separately manipulating
@@ -32,7 +38,7 @@ class TeleopDriveCommand(private val driver: CommandXboxController): Command() {
         // unsigned distance from the origin.
         r = if (r > 1.0) {
             1.0 // clamp to 1
-        } else if (r < 0.1) {
+        } else if (r < deadband) {
             0.0 // round to 0
         } else {
             // Otherwise, do a fancy deadband: smoothly interpolate
@@ -43,6 +49,8 @@ class TeleopDriveCommand(private val driver: CommandXboxController): Command() {
             // https://web.archive.org/web/20181021234413/http://www.gamasutra.com/blogs/JoshSutphin/20130416/190541/Doing_Thumbstick_Dead_Zones_Right.php
             (r - deadband) / (1.0 - deadband)
         }
+        // TODO: incorporate all this clamping logic into Utils.deadband().
+        // TODO: deadband rotation input.
 
         // Square the distance.  All values are between 0 and 1, so
         // squaring will make them smaller.  (Except that 1*1 = 1 so
@@ -58,9 +66,12 @@ class TeleopDriveCommand(private val driver: CommandXboxController): Command() {
         r = r*r
 
         // Now convert back to rectangular coordinates.
-        val newX = r * cos(theta)
-        val newY = r * sin(theta)
+        val actualX = r * cos(theta) * Swerve.Constants.MAX_VELOCITY
+        val actualY = r * sin(theta) * Swerve.Constants.MAX_VELOCITY
+        val actualRotation = rotation * Swerve.Constants.MAX_ANGULAR_VELOCITY
 
-        Swerve.driveFieldRelative(ChassisSpeeds(newX, newY, rotation))
+        Swerve.driveFieldRelative(
+            ChassisSpeeds(actualX, actualY, actualRotation)
+        )
     }
 }

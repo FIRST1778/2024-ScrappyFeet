@@ -26,10 +26,29 @@ class SwerveModule(
     turnInverted: InvertedValue,
 ) : Sendable {
     object Constants {
+        // Colsons have a diameter of 4 inches.
         val WHEEL_RADIUS = Units.inchesToMeters(2.0)
+        // These turn PID values are borrowed straight from Zappy.
         fun makeTurnPID() = PIDController(0.4, 0.0, 0.01)
+        // Theoretically the code can do closed-loop control, but to
+        // start with, I've set the PID constants to 0 so that they
+        // contribute no voltage.
         fun makeDrivePID() = PIDController(0.0, 0.0, 0.0)
-        fun makeDriveFeedforward() = SimpleMotorFeedforward(0.0, 1.0, 0.0)
+        // This feedforward is clever in that it does the same thing as
+        // open-loop control.  kS and kA are zero, so we don't add any
+        // voltage to overcome static friction or acceleration; it's
+        // all from the kV term (calculated as kV * velocity). Our
+        // current kV value is 12 / max_velocity, so the total voltage
+        // is velocity / max_velocity * 12, which is just like
+        // open-loop control.
+        fun makeDriveFeedforward() = SimpleMotorFeedforward(
+            0.0,
+            12.0 / Swerve.Constants.MAX_VELOCITY,
+            0.0
+        )
+        // I think these are right.
+        val DRIVE_RATIO = 1.0 / 5.35714285714
+        val TURN_RATIO = 7.0 / 150.0
     }
 
     private val driveMotor: TalonFX = TalonFX(driveMotorID)
@@ -38,13 +57,13 @@ class SwerveModule(
     init {
         driveMotor.configurator.apply(
             TalonFXConfiguration().apply {
-                Feedback = FeedbackConfigs().withSensorToMechanismRatio(1.0 / 5.35714285714)
+                Feedback = FeedbackConfigs().withSensorToMechanismRatio(Constants.DRIVE_RATIO)
                 MotorOutput = MotorOutputConfigs().withInverted(driveInverted)
             }
         )
         turnMotor.configurator.apply(
             TalonFXConfiguration().apply {
-                Feedback = FeedbackConfigs().withSensorToMechanismRatio(7.0 / 150.0)
+                Feedback = FeedbackConfigs().withSensorToMechanismRatio(Constants.TURN_RATIO)
                 MotorOutput = MotorOutputConfigs().withInverted(turnInverted)
             }
         )
@@ -74,6 +93,7 @@ class SwerveModule(
     override fun initSendable(builder: SendableBuilder?) {
         builder!!
         builder.addDoubleProperty("turn position (deg)", {Math.toDegrees(turnPosition)}, {})
+        builder.addDoubleProperty("raw drive position (rotations)", {driveMotor.position.valueAsDouble}, {})
         builder.addDoubleProperty("drive velocity (m/s)", {driveVelocity}, {})
         builder.addDoubleProperty("drive acceleration (m/s/s)", {driveAcceleration}, {})
     }

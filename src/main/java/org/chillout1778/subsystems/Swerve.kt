@@ -6,18 +6,18 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.wpilibj2.command.Subsystem
-import org.chillout1778.Controls
 import org.chillout1778.commands.TeleopDriveCommand
+import org.chillout1778.Controls
+import org.chillout1778.Robot
 
 object Swerve: Subsystem {
-
-    init {
-//        defaultCommand = TeleopDriveCommand(Controls.driver)
+    object Constants {
+        val MAX_VELOCITY = 1.0
+        val MAX_ANGULAR_VELOCITY = 1.0
     }
 
-    private fun robotAngle(): Double {
-        return 0.0 // TODO
-    }
+    private val robotAngle: Double
+        get() = 0.0 // TODO
 
     private val modules = arrayOf(
         SwerveModule(
@@ -50,20 +50,20 @@ object Swerve: Subsystem {
         Translation2d(1.0, 1.0),
         Translation2d(1.0,-1.0),
         Translation2d(-1.0,1.0),
-        Translation2d(-1.0,-1.0)
+        Translation2d(-1.0,-1.0),
     )
 
     fun driveFieldRelative(speeds: ChassisSpeeds) {
         driveRobotRelative(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 speeds,
-                Rotation2d.fromRadians(robotAngle())
+                Rotation2d.fromRadians(robotAngle)
             )
         )
     }
 
     fun driveRobotRelative(speeds: ChassisSpeeds) {
-        val discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02)
+        val discreteSpeeds = ChassisSpeeds.discretize(speeds, Robot.period)
         val moduleStates = swerveKinematics.toSwerveModuleStates(discreteSpeeds)
         for ((mod, state) in modules.zip(moduleStates)) {
             mod.driveState(state)
