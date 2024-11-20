@@ -12,10 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import org.chillout1778.commands.FlywheelFastCommand
-import org.chillout1778.commands.RollerSetCommand
-import org.chillout1778.subsystems.Flywheels
-import org.chillout1778.subsystems.Rollers
 
 /**
  * The VM is configured to automatically run this object (which basically functions as a singleton class),
@@ -27,13 +23,8 @@ import org.chillout1778.subsystems.Rollers
  * the `Main.kt` file in the project. (If you use the IDE's Rename or Move refactorings when renaming the
  * object or package, it will get changed everywhere.)
  */
-object Robot : TimedRobot(), Sendable
-{   val motor = TalonFX(1)
-
-
-    override fun initSendable(builder: SendableBuilder?) {
-        builder!!.addDoubleProperty("Motor speed (rpm)", {motor.velocity.valueAsDouble}, {})
-    }
+object Robot : TimedRobot()
+{
     override fun robotInit()
     {
         Controls
@@ -62,7 +53,6 @@ object Robot : TimedRobot(), Sendable
 
     override fun autonomousInit()
     {
-        FlywheelFastCommand().andThen(RollerSetCommand(Rollers.State.SUCK)).schedule()
     }
 
     override fun autonomousPeriodic()
@@ -78,12 +68,6 @@ object Robot : TimedRobot(), Sendable
     /** This method is called periodically during operator control.  */
     override fun teleopPeriodic()
     {
-        if (Controls.driver.getRawAxis(4) > 0.5) {
-            motor.setVoltage(2.0)
-        } else {
-            motor.setVoltage(0.0)
-        }
-        println(motor.velocity.valueAsDouble)
     }
 
     override fun testInit()
