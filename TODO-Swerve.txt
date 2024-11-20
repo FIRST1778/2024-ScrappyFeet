@@ -7,4 +7,3 @@
 - check inversions of all motors
 - check gear ratios of all motors
 - find CANCoder offsets
-- do drive controller (teleopInit())
