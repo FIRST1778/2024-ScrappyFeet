@@ -5,12 +5,10 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Subsystem
 import org.chillout1778.commands.TeleopDriveCommand
 import org.chillout1778.Controls
 import org.chillout1778.Robot
-import org.chillout1778.commands.contextYield
 
 object Swerve: Subsystem {
     object Constants {
@@ -54,15 +52,6 @@ object Swerve: Subsystem {
         Translation2d(-1.0,1.0),
         Translation2d(-1.0,-1.0),
     )
-
-    suspend fun driveFieldRelativeForSeconds(speeds: ChassisSpeeds, seconds: Double) {
-        val timer = Timer()
-        timer.start()
-        while (!timer.hasElapsed(seconds)) {
-            driveFieldRelative(speeds)
-            contextYield()
-        }
-    }
 
     fun driveFieldRelative(speeds: ChassisSpeeds) {
         driveRobotRelative(
