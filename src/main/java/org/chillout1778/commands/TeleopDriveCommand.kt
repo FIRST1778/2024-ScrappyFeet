@@ -11,12 +11,11 @@ import kotlin.math.sin
 import org.chillout1778.Controls
 import org.chillout1778.Controls.DriveInputs
 import org.chillout1778.subsystems.Swerve
+import org.chillout1778.Utils
 
 class TeleopDriveCommand(
     private val driveInputsSupplier: Supplier<DriveInputs>
 ) : Command() {
-
-    private val deadband: Double = 0.1
 
     override fun execute() {
         // With the WPILib coordinate system, x is forward and y is to
@@ -25,7 +24,7 @@ class TeleopDriveCommand(
         val inputs = driveInputsSupplier.get()
         val x = inputs.forward
         val y = inputs.left
-        val rotation = inputs.rotation
+        var rotation = inputs.rotation
 
         // Convert (x,y) into polar coordinates so that we can
         // manipulate magnitude (r) instead of separately manipulating
@@ -36,32 +35,15 @@ class TeleopDriveCommand(
         // Clamp or deadband r if necessary.  The value r will always be
         // positive because theta represents the angle and r the
         // unsigned distance from the origin.
-        r = if (r > 1.0) {
-            1.0 // clamp to 1
-        } else if (r < deadband) {
-            0.0 // round to 0
-        } else {
-            // Otherwise, do a fancy deadband: smoothly interpolate
-            // values from 0.1 to 1.0 into the fixed range 0.0 to 1.0.
-            // This fixes a problem where going from 0.09 to 0.1 causes
-            // the deadband to suddenly deactivate, thus jumping the
-            // output from 0.0 to 0.1.
-            // https://web.archive.org/web/20181021234413/http://www.gamasutra.com/blogs/JoshSutphin/20130416/190541/Doing_Thumbstick_Dead_Zones_Right.php
-            (r - deadband) / (1.0 - deadband)
-        }
-        // TODO: incorporate all this clamping logic into Utils.deadband().
-        // TODO: deadband rotation input.
+        r = Utils.deadZone(r, 0.1)
+        rotation = Utils.deadZone(rotation, 0.1)
 
         // Square the distance.  All values are between 0 and 1, so
         // squaring will make them smaller.  (Except that 1*1 = 1 so
         // that won't change.)  This approach gives the driver better
         // control when going slowly.
         //
-        // Our code avoids the following scenario: if the maximum
-        // joystick input lies on a circle (e.g., Xbox controller),
-        // *and* you square X and Y separately, then you won't
-        // be able to go as fast diagonally as you can go straight
-        // forward.  See the following issue on YAGSL:
+        // Note that you shouldn't square X and Y separately:
         // https://github.com/BroncBotz3481/YAGSL-Example/issues/196
         r = r*r
 

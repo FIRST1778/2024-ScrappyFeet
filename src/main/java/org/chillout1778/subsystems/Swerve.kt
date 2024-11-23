@@ -9,15 +9,22 @@ import edu.wpi.first.wpilibj2.command.Subsystem
 import org.chillout1778.commands.TeleopDriveCommand
 import org.chillout1778.Controls
 import org.chillout1778.Robot
+import kotlin.math.PI
 
 object Swerve: Subsystem {
     object Constants {
+        // How fast the robot can move in a straight line (meters/sec).
         val MAX_VELOCITY = 1.0
-        val MAX_ANGULAR_VELOCITY = 1.0
+        // How fast the robot can rotate (radians/sec).
+        val MAX_ANGULAR_VELOCITY = 2*PI
     }
 
-    private val robotAngle: Double
+    // Read yaw from the gyro (radians, counterclockwise from forward).
+    var robotAngle: Double
         get() = 0.0 // TODO
+        set(n) {
+            // Reset yaw to n.
+        }
 
     private val modules = arrayOf(
         SwerveModule(

@@ -14,6 +14,8 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
     // Implement this function in your derived class.
     abstract suspend fun runRoutine()
 
+    // The following functions are all helpers that just call yield().
+
     suspend fun wait(pred: () -> Boolean) {
         while (!pred())
             yield()
@@ -35,6 +37,8 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
             yield()
         }
     }
+
+    // Everything after this is implementation details.
 
     private var continuation: Continuation<Unit>? = null
 

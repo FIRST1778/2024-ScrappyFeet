@@ -11,7 +11,6 @@ object Controls {
         val left: Double,
         val rotation: Double,
     )
-
     fun getDroneControllerDriveInputs(): DriveInputs {
         return DriveInputs(
             forward = droneController.getRawAxis(2),
@@ -20,13 +19,16 @@ object Controls {
         )
     }
 
-    // unused
-    private val operatorController = CommandXboxController(1)
-    private fun getOperatorControllerDriveInputs(): DriveInputs {
-        return DriveInputs(
-            forward = operatorController.leftY,
-            left = -operatorController.leftX,
-            rotation = operatorController.rightX,
-        )
+    fun bindTriggers() {
+        // No Commands to bind yet.
     }
+
+    // private val operatorController = CommandXboxController(1)
+    // private fun getOperatorControllerDriveInputs(): DriveInputs {
+    //     return DriveInputs(
+    //         forward = operatorController.leftY,
+    //         left = -operatorController.leftX,
+    //         rotation = operatorController.rightX,
+    //     )
+    // }
 }
