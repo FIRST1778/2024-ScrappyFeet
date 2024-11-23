@@ -4,7 +4,10 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Subsystem
 import kotlin.coroutines.*
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.coroutines.intrinsics.*
+
+suspend fun contextYield() {
+    coroutineContext[CoroutineCommand.CommandCoroutineContext]!!.command.yield()
+}
 
 abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
     init {
@@ -38,6 +41,12 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
 
     private var continuation: Continuation<Unit>? = null
 
+    data class CommandCoroutineContext(val command: CoroutineCommand)
+        : AbstractCoroutineContextElement(Key)
+    {
+        companion object Key : CoroutineContext.Key<CommandCoroutineContext>
+    }
+
     suspend fun yield() = suspendCoroutine { c ->
         continuation = c
     }
@@ -45,7 +54,7 @@ abstract class CoroutineCommand(vararg requirements: Subsystem): Command() {
     override fun initialize() {
         continuation = this::runRoutine.createCoroutine(
             Continuation(
-                context = EmptyCoroutineContext,
+                context = CommandCoroutineContext(this),
                 resumeWith = { result ->
                     result.onFailure { e ->
                         println("caught exception thrown in coroutine: $e")
