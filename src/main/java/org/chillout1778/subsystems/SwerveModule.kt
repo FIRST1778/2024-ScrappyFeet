@@ -18,6 +18,7 @@ import kotlin.math.abs
 import kotlin.math.cos
 
 class SwerveModule(
+    name: String,
     driveMotorID: Int,
     turnMotorID: Int,
     canCoderID: Int,
