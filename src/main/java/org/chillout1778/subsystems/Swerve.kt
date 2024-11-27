@@ -42,28 +42,28 @@ object Swerve: Subsystem {
     private val modules = arrayOf(
         SwerveModule(
             name = "Front Left",
-            driveMotorID = 1, turnMotorID = 5, canCoderID = 9,
+            driveMotorID = 0, turnMotorID = 1, canCoderID = 8,
             driveInverted = InvertedValue.CounterClockwise_Positive,
             turnInverted  = InvertedValue.CounterClockwise_Positive,
             canCoderOffsetDegrees = 0.0,
         ),
         SwerveModule(
             name = "Front Right",
-            driveMotorID = 2, turnMotorID = 6, canCoderID = 10,
+            driveMotorID = 6, turnMotorID = 7, canCoderID = 11,
             driveInverted = InvertedValue.CounterClockwise_Positive,
             turnInverted  = InvertedValue.CounterClockwise_Positive,
             canCoderOffsetDegrees = 0.0,
         ),
         SwerveModule(
             name = "Back Left",
-            driveMotorID = 3, turnMotorID = 7, canCoderID = 11,
+            driveMotorID = 2, turnMotorID = 3, canCoderID = 9,
             driveInverted = InvertedValue.CounterClockwise_Positive,
             turnInverted  = InvertedValue.CounterClockwise_Positive,
             canCoderOffsetDegrees = 0.0,
         ),
         SwerveModule(
             name = "Back Right",
-            driveMotorID = 4, turnMotorID = 8, canCoderID = 12,
+            driveMotorID = 4, turnMotorID = 5, canCoderID = 10,
             driveInverted = InvertedValue.CounterClockwise_Positive,
             turnInverted  = InvertedValue.CounterClockwise_Positive,
             canCoderOffsetDegrees = 0.0,
