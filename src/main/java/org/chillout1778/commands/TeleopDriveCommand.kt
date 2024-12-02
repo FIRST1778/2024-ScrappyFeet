@@ -4,18 +4,18 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.Command
 import java.util.function.Supplier
-import kotlin.math.atan
-import kotlin.math.cos
-import kotlin.math.hypot
-import kotlin.math.sin
 import org.chillout1778.Controls
 import org.chillout1778.Controls.DriveInputs
 import org.chillout1778.subsystems.Swerve
 import org.chillout1778.Utils
+import kotlin.math.*
 
 class TeleopDriveCommand(
     private val driveInputsSupplier: Supplier<DriveInputs>
 ) : Command() {
+    init {
+        addRequirements(Swerve)
+    }
 
     override fun execute() {
         // With the WPILib coordinate system, x is forward and y is to
@@ -29,7 +29,7 @@ class TeleopDriveCommand(
         // Convert (x,y) into polar coordinates so that we can
         // manipulate magnitude (r) instead of separately manipulating
         // x and y.  This works better for squaring and for deadbands.
-        val theta = atan(y/x)
+        val theta = atan2(y, x)
         var r = hypot(x, y)
 
         // Clamp or deadband r if necessary.  The value r will always be
@@ -46,6 +46,7 @@ class TeleopDriveCommand(
         // Note that you shouldn't square X and Y separately:
         // https://github.com/BroncBotz3481/YAGSL-Example/issues/196
         r = r*r
+        rotation = rotation*rotation*Math.signum(rotation)
 
         // Now convert back to rectangular coordinates.
         val actualX = r * cos(theta) * Swerve.Constants.MAX_VELOCITY

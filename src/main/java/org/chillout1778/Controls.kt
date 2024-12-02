@@ -1,7 +1,6 @@
 package org.chillout1778
 
 import edu.wpi.first.wpilibj.GenericHID
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 
 object Controls {
     val droneController = GenericHID(0)
@@ -11,12 +10,21 @@ object Controls {
         val left: Double,
         val rotation: Double,
     )
+    fun getDmytroControllerDriveInputs(): DriveInputs {
+        return DriveInputs(
+            forward = -droneController.getRawAxis(1),
+            left = -droneController.getRawAxis(0),
+            rotation = -droneController.getRawAxis(2)
+        )
+    }
+
     fun getDroneControllerDriveInputs(): DriveInputs {
         return DriveInputs(
             forward = droneController.getRawAxis(2),
             left = -droneController.getRawAxis(3),
             rotation = -droneController.getRawAxis(0)
         )
+
     }
 
     fun bindTriggers() {

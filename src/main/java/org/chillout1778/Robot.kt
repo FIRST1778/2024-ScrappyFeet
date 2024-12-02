@@ -1,18 +1,13 @@
 package org.chillout1778
 
-import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
-import edu.wpi.first.util.sendable.Sendable
-import edu.wpi.first.util.sendable.SendableBuilder
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.util.WPILibVersion
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import org.chillout1778.commands.TeleopDriveCommand
 import org.chillout1778.subsystems.Swerve
 
@@ -30,6 +25,7 @@ object Robot : TimedRobot() {
         // Controls would run all that code.  This year, I want to put
         // it in its own function (bindTriggers) that we always call in
         // the correct place (here).
+        Swerve
     }
 
     override fun robotPeriodic() {
@@ -42,6 +38,7 @@ object Robot : TimedRobot() {
         // For now, we reset gyro angle ourselves and assume we're
         // pointing forwards.  Later, PathPlanner will reset it for us.
         Swerve.robotAngle = 0.0
+        Swerve.odometry.resetPosition(Rotation2d(), Swerve.getAllModulePositions(), Pose2d())
     }
 
     // These two functions make sure the TeleopDriveCommand is running

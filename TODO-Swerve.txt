@@ -1,8 +1,3 @@
-- install Krakens as turn motors
-- fix all the wiring
-- implement gyro code (Swerve.robotAngle)
-- set correct CAN IDs
-- fix the kinematics to have actual coordinates
 - add SwerveModules to Shuffleboard/Elastic
 - check inversions of all motors
 - check gear ratios of all motors
