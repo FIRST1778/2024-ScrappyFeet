@@ -35,8 +35,8 @@ class TeleopDriveCommand(
         // Clamp or deadband r if necessary.  The value r will always be
         // positive because theta represents the angle and r the
         // unsigned distance from the origin.
-        r = Utils.deadZone(r, 0.1)
-        rotation = Utils.deadZone(rotation, 0.1)
+        r = Utils.deadZone(r, 0.03)
+        rotation = Utils.deadZone(rotation, 0.03)
 
         // Square the distance.  All values are between 0 and 1, so
         // squaring will make them smaller.  (Except that 1*1 = 1 so

@@ -2,29 +2,47 @@ package org.chillout1778.subsystems
 
 import com.ctre.phoenix6.hardware.Pigeon2
 import com.ctre.phoenix6.signals.InvertedValue
+import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig
+import com.pathplanner.lib.util.PIDConstants
+import com.pathplanner.lib.util.ReplanningConfig
 import edu.wpi.first.math.MathUtil
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModulePosition
+import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.util.Units
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
-import edu.wpi.first.wpilibj2.command.Subsystem
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import kotlin.math.PI
 import org.chillout1778.Robot
+import kotlin.math.PI
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 object Swerve: SubsystemBase() {
     object Constants {
+
+        val moduleXY = Units.inchesToMeters(10.365)
+        val moduleRadius = sqrt(moduleXY.pow(2.0) * 2.0)
+        const val DRIVE_REDUCTION = 1.0/ 5.35714285714
+        val wheelRadius = Units.inchesToMeters(3.9/2)
+        private const val KRAKEN_FREE_SPEED = 5800.0 * PI / 30.0 // with FOC
+        private val theoreticalMaxSpeed = KRAKEN_FREE_SPEED * DRIVE_REDUCTION * wheelRadius
+        private val theoreticalMaxAngularSpeed = theoreticalMaxSpeed / moduleRadius
         // How fast the robot can move in a straight line (meters/sec).
-        val MAX_VELOCITY = 1.0
+        val MAX_VELOCITY = 2.62
         // How far the swerve modules are from (0,0).
-        val XY_DISTANCE = Units.inchesToMeters(11.75)
+        val XY_DISTANCE = Units.inchesToMeters(10.365)//11.75)
         // How fast the robot can rotate (radians/sec).
-        val MAX_ANGULAR_VELOCITY = MAX_VELOCITY / XY_DISTANCE / Math.sqrt(2.0)
+        val MAX_ANGULAR_VELOCITY = theoreticalMaxAngularSpeed
+        init {
+            println("max vel ${MAX_VELOCITY}, max ang vel ${MAX_ANGULAR_VELOCITY}")
+        }
     }
 
     val gyro = Pigeon2(30)
@@ -85,20 +103,20 @@ object Swerve: SubsystemBase() {
     }
 
     private val kinematics = SwerveDriveKinematics(
-        Translation2d(1.0, 1.0).times(Constants.XY_DISTANCE), // FL
-        Translation2d(1.0, -1.0).times(Constants.XY_DISTANCE), // FR
-        Translation2d(-1.0, 1.0).times(Constants.XY_DISTANCE), // BL
-        Translation2d(-1.0, -1.0).times(Constants.XY_DISTANCE), // BR
+        Translation2d(Constants.XY_DISTANCE, Constants.XY_DISTANCE), // FL
+        Translation2d(Constants.XY_DISTANCE, -Constants.XY_DISTANCE), // FR
+        Translation2d(-Constants.XY_DISTANCE, Constants.XY_DISTANCE), // BL
+        Translation2d(-Constants.XY_DISTANCE, -Constants.XY_DISTANCE), // BR
     )
 
     val odometry = SwerveDriveOdometry(
         kinematics, // positions of modules
         Rotation2d(robotAngle), // initial robot yaw (converted to Rotation2d)
-        getAllModulePositions() // initial "positions" (how far the wheels have moved
+        getModulePositions() // initial "positions" (how far the wheels have moved
                             // and in what direction)
     )
 
-    fun getAllModulePositions(): Array<SwerveModulePosition> {
+    fun getModulePositions(): Array<SwerveModulePosition> {
         return modules.map { it.driveAndTurnPosition }.toTypedArray()
     }
 
@@ -117,13 +135,31 @@ object Swerve: SubsystemBase() {
         for ((mod, state) in modules.zip(moduleStates)) {
             mod.driveState(state)
         }
-        odometry.update(Rotation2d(robotAngle), getAllModulePositions())
+        odometry.update(Rotation2d(robotAngle), getModulePositions())
+//        println("odometry pose: ${odometry.poseMeters}")
     }
-
+    init{
+       AutoBuilder.configureHolonomic(
+           { odometry.poseMeters },
+           { pose: Pose2d -> odometry.resetPosition(Rotation2d(robotAngle), getModulePositions(), pose) },
+           { kinematics.toChassisSpeeds(*modules.map{it.state}.toTypedArray())},
+           { speeds: ChassisSpeeds -> driveRobotRelative(speeds) },
+           HolonomicPathFollowerConfig(
+               PIDConstants(2.0,0.0,0.0), //translation
+               PIDConstants(2.0 ,0.0,0.0), //rotation (this could be slower...)
+               1.0,
+               SwerveModule.WHEEL_RADIUS,
+               ReplanningConfig()
+           ),
+           {Robot.redAlliance()},
+           this
+       )
+    }
     override fun initSendable(builder: SendableBuilder?) {
         builder!!
         builder.addDoubleProperty("robotAngle", {Math.toDegrees(robotAngle)}, {})
         builder.addDoubleProperty("raw gyro yaw", {gyro.angle}, {})
         builder.addStringProperty("odometry pose", {odometry.poseMeters.toString()}, {})
     }
+
 }
