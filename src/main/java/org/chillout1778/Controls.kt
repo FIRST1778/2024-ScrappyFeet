@@ -3,9 +3,11 @@ package org.chillout1778
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.GenericHID
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import org.chillout1778.commands.StraightForwardCommand
 import org.chillout1778.commands.WilliamTestCommand
 import org.chillout1778.subsystems.Swerve
 
@@ -36,11 +38,14 @@ object Controls {
 
     fun bindTriggers() {
         // No Commands to bind yet.
-        droneController.button(3).whileTrue(
+        val cmd = StraightForwardCommand()
+        Shuffleboard.getTab("Commands").add("sysid cmd", cmd).withPosition(1, 1).withSize(1, 1)
+        droneController.axisGreaterThan(4, 0.5).whileTrue(
 //            InstantCommand({
 //            Swerve.robotAngle = 0.0
 //            Swerve.odometry.resetPosition(Rotation2d(), Swerve.getAllModulePositions(), Pose2d())}))
-            WilliamTestCommand()
+//            WilliamTestCommand()
+            cmd
         )
 
     }

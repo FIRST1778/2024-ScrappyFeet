@@ -5,10 +5,7 @@ import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry
-import edu.wpi.first.math.kinematics.SwerveModulePosition
+import edu.wpi.first.math.kinematics.*
 import edu.wpi.first.math.util.Units
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
@@ -20,9 +17,9 @@ import org.chillout1778.Robot
 object Swerve: SubsystemBase() {
     object Constants {
         // How fast the robot can move in a straight line (meters/sec).
-        val MAX_VELOCITY = 1.0
+        val MAX_VELOCITY = 1//2.62
         // How far the swerve modules are from (0,0).
-        val XY_DISTANCE = Units.inchesToMeters(11.75)
+        val XY_DISTANCE = Units.inchesToMeters(10.365)
         // How fast the robot can rotate (radians/sec).
         val MAX_ANGULAR_VELOCITY = MAX_VELOCITY / XY_DISTANCE / Math.sqrt(2.0)
     }
@@ -102,6 +99,15 @@ object Swerve: SubsystemBase() {
         return modules.map { it.driveAndTurnPosition }.toTypedArray()
     }
 
+    fun getAllModuleStates(): Array<SwerveModuleState> {
+        return modules.map { SwerveModuleState(it.driveVelocity, Rotation2d(it.turnPosition)) }.toTypedArray()
+    }
+
+    fun getOverallSpeed(): Double {
+        val speeds = kinematics.toChassisSpeeds(*getAllModuleStates())
+        return Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond)
+    }
+
     fun driveFieldRelative(speeds: ChassisSpeeds) {
         driveRobotRelative(
             ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -125,5 +131,6 @@ object Swerve: SubsystemBase() {
         builder.addDoubleProperty("robotAngle", {Math.toDegrees(robotAngle)}, {})
         builder.addDoubleProperty("raw gyro yaw", {gyro.angle}, {})
         builder.addStringProperty("odometry pose", {odometry.poseMeters.toString()}, {})
+        builder.addDoubleProperty("overall speed", { getOverallSpeed() }, {})
     }
 }

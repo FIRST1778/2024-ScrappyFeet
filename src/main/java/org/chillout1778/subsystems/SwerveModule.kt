@@ -33,7 +33,7 @@ class SwerveModule(
 ) : Sendable {
     object Constants {
         // Colsons have a diameter of 4 inches.
-        val WHEEL_RADIUS = Units.inchesToMeters(2.0)
+        val WHEEL_RADIUS = Units.inchesToMeters(3.9/2)
         // These turn PID values are borrowed straight from Zappy.
         fun makeTurnPID() = PIDController(2.0, 0.0, 0.01).apply {
             enableContinuousInput(-Math.PI, Math.PI)
@@ -51,11 +51,11 @@ class SwerveModule(
         // open-loop control.
         fun makeDriveFeedforward() = SimpleMotorFeedforward(
             0.0,
-            12.0 / Swerve.Constants.MAX_VELOCITY,
+            1.0,//4.55,
             0.0
         )
         // I think these are right.
-        val DRIVE_RATIO = 1.0 / 5.35714285714
+        val DRIVE_RATIO = 5.35714285714
         val TURN_RATIO =  150.0 / 7.0
     }
 
@@ -89,9 +89,9 @@ class SwerveModule(
     private val drivePID = Constants.makeDrivePID()
     private val driveFeedforward = Constants.makeDriveFeedforward()
 
-    private val turnPosition: Double
+    val turnPosition: Double
         get() = MathUtil.angleModulus(turnMotor.position.valueAsDouble * 2*PI)
-    private val driveVelocity: Double
+    val driveVelocity: Double
         get() = driveMotor.velocity.valueAsDouble * 2*PI * Constants.WHEEL_RADIUS
     private val driveAcceleration: Double
         get() = driveMotor.acceleration.valueAsDouble * 2*PI * Constants.WHEEL_RADIUS
@@ -102,13 +102,14 @@ class SwerveModule(
         drivePosition, Rotation2d(turnPosition)
     )
 
+    var commandedVolts = 0.0
     fun driveState(state: SwerveModuleState) {
         val optimizedState = SwerveModuleState.optimize(state, Rotation2d.fromRadians(turnPosition))
         val goalTurnPosition = optimizedState.angle.radians
         val goalDriveVelocity = optimizedState.speedMetersPerSecond * cos(turnPosition - goalTurnPosition)
         turnMotor.setVoltage(turnPID.calculate(turnPosition, goalTurnPosition))
-        driveMotor.setVoltage(drivePID.calculate(driveVelocity, goalDriveVelocity)
-            + driveFeedforward.calculate(goalDriveVelocity, driveAcceleration))
+        commandedVolts = drivePID.calculate(driveVelocity, goalDriveVelocity) + driveFeedforward.calculate(goalDriveVelocity, driveAcceleration)
+        driveMotor.setVoltage(commandedVolts)
     }
 
     override fun initSendable(builder: SendableBuilder?) {
@@ -120,6 +121,8 @@ class SwerveModule(
         builder.addDoubleProperty("turn position (deg)", {Math.toDegrees(turnPosition)}, {})
 //        builder.addDoubleProperty("raw drive position (rotations)", {driveMotor.position.valueAsDouble}, {})
         builder.addDoubleProperty("drive velocity (mps)", {driveVelocity}, {})
+        builder.addDoubleProperty("command drive voltage", {commandedVolts}, {})
 //        builder.addDoubleProperty("drive acceleration (mps^2)", {driveAcceleration}, {})
+        builder.addDoubleProperty("raw drive velocity", {driveMotor.velocity.valueAsDouble}, {})
     }
 }

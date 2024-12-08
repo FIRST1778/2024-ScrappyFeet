@@ -54,7 +54,7 @@ class TeleopDriveCommand(
         val actualRotation = rotation * Swerve.Constants.MAX_ANGULAR_VELOCITY
 
         Swerve.driveFieldRelative(
-            ChassisSpeeds(actualX, actualY, actualRotation)
+            ChassisSpeeds(actualX*5, actualY*5, actualRotation*5)
         )
     }
 }
