@@ -17,7 +17,7 @@ import org.chillout1778.Robot
 object Swerve: SubsystemBase() {
     object Constants {
         // How fast the robot can move in a straight line (meters/sec).
-        val MAX_VELOCITY = 1//2.62
+        val MAX_VELOCITY = 5.12
         // How far the swerve modules are from (0,0).
         val XY_DISTANCE = Units.inchesToMeters(10.365)
         // How fast the robot can rotate (radians/sec).

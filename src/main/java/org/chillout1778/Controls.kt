@@ -38,15 +38,15 @@ object Controls {
 
     fun bindTriggers() {
         // No Commands to bind yet.
-        val cmd = StraightForwardCommand()
-        Shuffleboard.getTab("Commands").add("sysid cmd", cmd).withPosition(1, 1).withSize(1, 1)
-        droneController.axisGreaterThan(4, 0.5).whileTrue(
+//        val cmd = StraightForwardCommand()
+//        Shuffleboard.getTab("Commands").add("sysid cmd", cmd).withPosition(1, 1).withSize(1, 1)
+//        droneController.axisGreaterThan(4, 0.5).whileTrue(
 //            InstantCommand({
 //            Swerve.robotAngle = 0.0
 //            Swerve.odometry.resetPosition(Rotation2d(), Swerve.getAllModulePositions(), Pose2d())}))
 //            WilliamTestCommand()
-            cmd
-        )
+//            cmd
+//        )
 
     }
 
