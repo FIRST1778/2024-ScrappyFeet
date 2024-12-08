@@ -1,9 +1,16 @@
 package org.chillout1778
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.GenericHID
+import edu.wpi.first.wpilibj2.command.InstantCommand
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import org.chillout1778.commands.WilliamTestCommand
+import org.chillout1778.subsystems.Swerve
 
 object Controls {
-    val droneController = GenericHID(0)
+    val droneController = CommandGenericHID(0)
 
     data class DriveInputs(
         val forward: Double,
@@ -29,14 +36,21 @@ object Controls {
 
     fun bindTriggers() {
         // No Commands to bind yet.
+        droneController.button(3).whileTrue(
+//            InstantCommand({
+//            Swerve.robotAngle = 0.0
+//            Swerve.odometry.resetPosition(Rotation2d(), Swerve.getAllModulePositions(), Pose2d())}))
+            WilliamTestCommand()
+        )
+
     }
 
-    // private val operatorController = CommandXboxController(1)
-    // private fun getOperatorControllerDriveInputs(): DriveInputs {
-    //     return DriveInputs(
-    //         forward = operatorController.leftY,
-    //         left = -operatorController.leftX,
-    //         rotation = operatorController.rightX,
-    //     )
-    // }
+     private val operatorController = CommandXboxController(1)
+     private fun getOperatorControllerDriveInputs(): DriveInputs {
+         return DriveInputs(
+             forward = operatorController.leftY,
+             left = -operatorController.leftX,
+             rotation = operatorController.rightX,
+         )
+     }
 }

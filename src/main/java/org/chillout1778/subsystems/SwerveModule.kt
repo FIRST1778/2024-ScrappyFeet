@@ -132,7 +132,7 @@ class SwerveModule(
 
     override fun initSendable(builder: SendableBuilder?) {
         builder!!
-
+        builder.clearProperties()
         builder.addDoubleProperty("raw turn position", {turnMotor.position.valueAsDouble}, {})
         builder.addDoubleProperty("raw cancoder position", {canCoder.absolutePosition.valueAsDouble}, {})
         builder.addDoubleProperty("raw drive position (rev)", {driveMotor.position.valueAsDouble}, {})
