@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
-* text=auto
+src/main/deploy/choreo/*.traj binary
+src/main/deploy/pathplanner/autos/*.auto binary
+src/main/deploy/pathplanner/paths/*.path binary
+Choreo.chor binary
