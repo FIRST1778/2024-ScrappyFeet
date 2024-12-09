@@ -28,7 +28,7 @@ class StraightForwardCommand(
 
     override fun execute() {
         println("going straight forward at ${volts} volts")
-        var curSpeed = Swerve.getOverallSpeed()
+        var curSpeed = Swerve.overallSpeed
         if (curSpeed > maxSpeed) maxSpeed = curSpeed
         Swerve.driveFieldRelative(
             ChassisSpeeds(volts, 0.0, 0.0)

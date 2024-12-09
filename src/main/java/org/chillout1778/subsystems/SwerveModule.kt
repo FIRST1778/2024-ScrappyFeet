@@ -1,9 +1,6 @@
 package org.chillout1778.subsystems
 
-import com.ctre.phoenix6.configs.FeedbackConfigs
-import com.ctre.phoenix6.configs.MagnetSensorConfigs
-import com.ctre.phoenix6.configs.MotorOutputConfigs
-import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue
@@ -31,11 +28,11 @@ class SwerveModule(
     driveInverted: InvertedValue,
     turnInverted: InvertedValue,
 ) : Sendable {
-    object Constants {
+    companion object Constants {
         // Colsons have a diameter of 4 inches.
         val WHEEL_RADIUS = Units.inchesToMeters(3.9/2)
         // These turn PID values are borrowed straight from Zappy.
-        fun makeTurnPID() = PIDController(2.0, 0.0, 0.01).apply {
+        fun makeTurnPID() = PIDController(7.0, 0.0, 0.01).apply {
             enableContinuousInput(-Math.PI, Math.PI)
         }
         // Theoretically the code can do closed-loop control, but to
@@ -65,15 +62,33 @@ class SwerveModule(
     init {
         driveMotor.configurator.apply(
             TalonFXConfiguration().apply {
-                Feedback = FeedbackConfigs().withSensorToMechanismRatio(Constants.DRIVE_RATIO)
+                Feedback = FeedbackConfigs().withSensorToMechanismRatio(DRIVE_RATIO)
                 MotorOutput = MotorOutputConfigs().withInverted(driveInverted)
             }
         )
+        driveMotor.configurator.apply(
+            CurrentLimitsConfigs()
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(45.0)
+                .withSupplyCurrentThreshold(70.0)
+                .withSupplyTimeThreshold(0.1)
+                .withStatorCurrentLimit(80.0)
+                .withStatorCurrentLimitEnable(true)
+        )
         turnMotor.configurator.apply(
             TalonFXConfiguration().apply {
-                Feedback = FeedbackConfigs().withSensorToMechanismRatio(Constants.TURN_RATIO)
+                Feedback = FeedbackConfigs().withSensorToMechanismRatio(TURN_RATIO)
                 MotorOutput = MotorOutputConfigs().withInverted(turnInverted)
             }
+        )
+        turnMotor.configurator.apply(
+            CurrentLimitsConfigs()
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(45.0)
+                .withSupplyCurrentThreshold(70.0)
+                .withSupplyTimeThreshold(0.1)
+                .withStatorCurrentLimit(80.0)
+                .withStatorCurrentLimitEnable(true)
         )
         canCoder.configurator.apply(
             MagnetSensorConfigs()
@@ -85,21 +100,26 @@ class SwerveModule(
         turnMotor.setNeutralMode(NeutralModeValue.Brake)
     }
 
-    private val turnPID = Constants.makeTurnPID()
-    private val drivePID = Constants.makeDrivePID()
-    private val driveFeedforward = Constants.makeDriveFeedforward()
+    private val turnPID = makeTurnPID()
+    private val drivePID = makeDrivePID()
+    private val driveFeedforward = makeDriveFeedforward()
 
     val turnPosition: Double
         get() = MathUtil.angleModulus(turnMotor.position.valueAsDouble * 2*PI)
-    val driveVelocity: Double
-        get() = driveMotor.velocity.valueAsDouble * 2*PI * Constants.WHEEL_RADIUS
+    private val driveVelocity: Double
+        get() = driveMotor.velocity.valueAsDouble * 2*PI * WHEEL_RADIUS
     private val driveAcceleration: Double
-        get() = driveMotor.acceleration.valueAsDouble * 2*PI * Constants.WHEEL_RADIUS
+        get() = driveMotor.acceleration.valueAsDouble * 2*PI * WHEEL_RADIUS
     private val drivePosition: Double
-        get() = driveMotor.position.valueAsDouble * 2*PI * Constants.WHEEL_RADIUS
+        get() = driveMotor.position.valueAsDouble * 2*PI * WHEEL_RADIUS
 
-    val driveAndTurnPosition get() = SwerveModulePosition(
+    // Accessors for "overall" statistics, basically combines drive and turn information.
+    // State is about drive velocity, position is about drive position.
+    val position get() = SwerveModulePosition(
         drivePosition, Rotation2d(turnPosition)
+    )
+    val state get() = SwerveModuleState(
+        driveVelocity, Rotation2d(turnPosition),
     )
 
     var commandedVolts = 0.0
@@ -108,7 +128,8 @@ class SwerveModule(
         val goalTurnPosition = optimizedState.angle.radians
         val goalDriveVelocity = optimizedState.speedMetersPerSecond * cos(turnPosition - goalTurnPosition)
         turnMotor.setVoltage(turnPID.calculate(turnPosition, goalTurnPosition))
-        commandedVolts = drivePID.calculate(driveVelocity, goalDriveVelocity) + driveFeedforward.calculate(goalDriveVelocity, driveAcceleration)
+        commandedVolts = drivePID.calculate(driveVelocity, goalDriveVelocity) +
+                    driveFeedforward.calculate(goalDriveVelocity, driveAcceleration)
         driveMotor.setVoltage(commandedVolts)
     }
 
@@ -117,7 +138,7 @@ class SwerveModule(
         builder.clearProperties()
         builder.addDoubleProperty("raw turn position", {turnMotor.position.valueAsDouble}, {})
         builder.addDoubleProperty("raw cancoder position", {canCoder.absolutePosition.valueAsDouble}, {})
-
+        builder.addDoubleProperty("raw drive position (rev)", {driveMotor.position.valueAsDouble}, {})
         builder.addDoubleProperty("turn position (deg)", {Math.toDegrees(turnPosition)}, {})
 //        builder.addDoubleProperty("raw drive position (rotations)", {driveMotor.position.valueAsDouble}, {})
         builder.addDoubleProperty("drive velocity (mps)", {driveVelocity}, {})
