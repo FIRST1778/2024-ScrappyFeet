@@ -16,8 +16,6 @@ import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.chillout1778.Robot
-import kotlin.math.PI
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 object Swerve: SubsystemBase() {
@@ -28,6 +26,7 @@ object Swerve: SubsystemBase() {
         val XY_DISTANCE = Units.inchesToMeters(10.365)
         // How fast the robot can rotate (radians/sec).
         val MAX_ANGULAR_VELOCITY = MAX_VELOCITY / (XY_DISTANCE * sqrt(2.0))
+        val CHASSIS_RADIUS = (XY_DISTANCE * sqrt(2.0))
         init {
             println("max vel ${MAX_VELOCITY}, max ang vel ${MAX_ANGULAR_VELOCITY}")
         }
@@ -108,12 +107,12 @@ object Swerve: SubsystemBase() {
         return modules.map { it.position }.toTypedArray()
     }
 
-    fun getAllModuleStates(): Array<SwerveModuleState> {
+    fun getModuleStates(): Array<SwerveModuleState> {
         return modules.map { it.state }.toTypedArray()
     }
 
     val overallSpeed: Double get() {
-        val speeds = kinematics.toChassisSpeeds(*getAllModuleStates())
+        val speeds = kinematics.toChassisSpeeds(*getModuleStates())
         return Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond)
     }
 
@@ -142,10 +141,10 @@ object Swerve: SubsystemBase() {
            { kinematics.toChassisSpeeds(*modules.map{it.state}.toTypedArray())},
            { speeds: ChassisSpeeds -> driveRobotRelative(speeds) },
            HolonomicPathFollowerConfig(
-               PIDConstants(2.0,0.0,0.0), //translation
-               PIDConstants(2.0 ,0.0,0.0), //rotation (this could be slower...)
-               1.0,
-               SwerveModule.WHEEL_RADIUS,
+               PIDConstants(3.0,0.0,0.0), //translation
+               PIDConstants(3.0 ,0.0,0.0), //rotation (this could be slower...)
+               5.0,
+               Constants.CHASSIS_RADIUS,
                ReplanningConfig()
            ),
            {Robot.redAlliance()},
