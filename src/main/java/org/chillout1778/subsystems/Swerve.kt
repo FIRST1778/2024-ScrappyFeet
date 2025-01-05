@@ -132,9 +132,9 @@ object Swerve: SubsystemBase() {
             mod.driveState(state)
         }
         odometry.update(Rotation2d(robotAngle), getModulePositions())
-//        println("odometry pose: ${odometry.poseMeters}")
     }
-    init{
+
+    init {
        AutoBuilder.configureHolonomic(
            { odometry.poseMeters },
            { pose: Pose2d -> odometry.resetPosition(Rotation2d(robotAngle), getModulePositions(), pose) },

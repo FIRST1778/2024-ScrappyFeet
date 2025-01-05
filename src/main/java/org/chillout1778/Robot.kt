@@ -20,6 +20,7 @@ object Robot : TimedRobot() {
     fun redAlliance() : Boolean {
         return DriverStation.getAlliance().get() == DriverStation.Alliance.Red
     }
+
     private lateinit var autoChooser: SendableChooser<Command>
     private fun configureAutoChooser(){
         autoChooser = AutoBuilder.buildAutoChooser()
@@ -27,32 +28,23 @@ object Robot : TimedRobot() {
             add(autoChooser).withSize(2, 1)
         }
     }
+
+    lateinit var simonLogger: SimonLogger
+
     override fun robotInit() {
         HAL.report(tResourceType.kResourceType_Language, tInstances.kLanguage_Kotlin, 0, WPILibVersion.Version)
-
-        // Bind Triggers (e.g., the operator controller's A button) to
-        // Commands (e.g., IntakeCommand).
+        simonLogger = SimonLogger()
         Controls.bindTriggers()
-        // Note: Last year we did this in Controls' init{} block, and
-        // here we had a line that just read "Controls", which would
-        // run the initializers for the Controls object, thus binding
-        // the triggers.  But I think it's confusing that accessing
-        // Controls would run all that code.  This year, I want to put
-        // it in its own function (bindTriggers) that we always call in
-        // the correct place (here).
         Swerve
         configureAutoChooser()
     }
 
     override fun robotPeriodic() {
-        // This line activates WPILib's Command framework, which takes
-        // care of all the Subsystems and Commands.
         CommandScheduler.getInstance().run()
+        simonLogger.periodic()
     }
 
     override fun autonomousInit() {
-        // For now, we reset gyro angle ourselves and assume we're
-        // pointing forwards.  Later, PathPlanner will reset it for us.
         Swerve.robotAngle = 0.0
         Swerve.odometry.resetPosition(Rotation2d(), Swerve.getModulePositions(), Pose2d())
         autoChooser.selected.schedule()
@@ -63,6 +55,7 @@ object Robot : TimedRobot() {
     override fun teleopInit() {
         Swerve.defaultCommand = TeleopDriveCommand(Controls::getDroneControllerDriveInputs)
     }
+
     override fun teleopExit() {
         Swerve.removeDefaultCommand()
     }

@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import org.chillout1778.commands.StraightForwardCommand
 import org.chillout1778.commands.WilliamTestCommand
 import org.chillout1778.subsystems.Swerve
 
